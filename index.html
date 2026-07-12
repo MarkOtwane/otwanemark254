@@ -27,26 +27,17 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-		<!-- Font Awesome for social icons -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
 		<!-- Main Stylesheet -->
 		<link rel="stylesheet" href="style.css" />
-
-		<!-- GSAP for animations -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" defer></script>
 	</head>
 	<body>
+		<!-- Scroll progress -->
+		<div id="scroll-progress" aria-hidden="true"></div>
+
 		<!-- Navigation -->
-		<nav role="navigation" aria-label="Main navigation">
+		<nav class="site-nav" role="navigation" aria-label="Main navigation">
 			<div class="nav-inner">
 				<a class="brand" href="#home">Mark Otwane</a>
-				<button id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-navigation" class="nav-toggle">
-					<span class="sr-only">Menu</span>
-					<i class="fas fa-bars" aria-hidden="true"></i>
-				</button>
 
 				<ul id="primary-navigation" class="nav-list">
 					<li><a href="#home" class="active">Home</a></li>
@@ -55,11 +46,33 @@
 					<li><a href="#contact">Contact</a></li>
 				</ul>
 
-				<!-- Theme toggle button -->
-				<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-					<i class="fas fa-moon" aria-hidden="true"></i>
-				</button>
+				<div class="nav-right">
+					<!-- Theme toggle button -->
+					<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+						<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+							<circle cx="12" cy="12" r="4.2" />
+							<path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7" />
+						</svg>
+						<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M20.5 14.5a8.5 8.5 0 1 1-9-11 6.7 6.7 0 0 0 9 11Z" />
+						</svg>
+					</button>
+
+					<button id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-navigation" class="nav-toggle">
+						<span class="nav-toggle-bars"><span></span><span></span><span></span></span>
+					</button>
+				</div>
 			</div>
+		</nav>
+
+		<!-- Section dot navigation -->
+		<nav class="section-dots" aria-label="Section navigation">
+			<a href="#home" data-target="home" data-label="Home" aria-label="Home" class="active"></a>
+			<a href="#about" data-target="about" data-label="About" aria-label="About"></a>
+			<a href="#philosophy" data-target="philosophy" data-label="Philosophy" aria-label="Philosophy"></a>
+			<a href="#skills" data-target="skills" data-label="Skills" aria-label="Skills"></a>
+			<a href="#testimonials" data-target="testimonials" data-label="Testimonials" aria-label="Testimonials"></a>
+			<a href="#contact" data-target="contact" data-label="Contact" aria-label="Contact"></a>
 		</nav>
 
 		<!-- Hero Section -->
@@ -71,20 +84,26 @@
 					<h2>Software Engineer | Python Expert | React | Node JS | React Native</h2>
 					<p>I create beautiful, functional and user-centered digital experiences that solve real-world problems</p>
 					<div class="btn">
-						<button type="button" data-href="https://github.com/MarkOtwane" aria-label="View my work on GitHub">View my work</button>
-						<button type="button" data-href="https://docs.google.com/document/d/1r4snkaaciF3vH-895hGN5rwstweFeoOyTBtIpTnyP3g/edit?usp=sharing" aria-label="View my CV">
-							View CV
+						<button type="button" class="btn-cta btn-cta--primary" data-scroll="#projects" aria-label="View my projects">View Projects</button>
+						<button type="button" class="btn-cta btn-cta--outline" data-scroll="#contact" aria-label="Contact me">Contact Me</button>
+						<button
+							type="button"
+							class="btn-cta btn-cta--outline"
+							data-href="https://docs.google.com/document/d/1r4snkaaciF3vH-895hGN5rwstweFeoOyTBtIpTnyP3g/edit?usp=sharing"
+							aria-label="Download my resume"
+						>
+							Download Resume
 						</button>
 					</div>
 					<div class="social-links" role="list" aria-label="Social media links">
 						<a href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-							<i class="fab fa-github" aria-hidden="true"></i>
+							<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
 						</a>
 						<a href="https://www.instagram.com/otwanemark" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
-							<i class="fab fa-instagram" aria-hidden="true"></i>
+							<img src="./public/icons/instagram.svg" alt="" aria-hidden="true" />
 						</a>
 						<a href="https://www.linkedin.com/in/mark-otwane-800871349" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-							<i class="fab fa-linkedin" aria-hidden="true"></i>
+							<img src="./public/icons/linkedin.svg" alt="" aria-hidden="true" />
 						</a>
 					</div>
 				</div>
@@ -93,9 +112,9 @@
 
 		<!-- About Section -->
 		<section class="about" id="about">
-			<h1 class="section-title">About <span>Me</span></h1>
+			<h1 class="section-title reveal">About <span>Me</span></h1>
 			<div class="description">
-				<div class="left">
+				<div class="left reveal">
 					<div class="top">
 						<p>Highly motivated software engineer with 2+ years of experience in creating impactful digital solutions. Skilled in:</p>
 						<ul>
@@ -108,16 +127,16 @@
 					</div>
 					<div class="bottom">
 						<div>
-							<span>50+</span>
+							<span class="counter" data-count-to="50" data-suffix="+">0+</span>
 							<p>Completed Projects</p>
 						</div>
 						<div>
-							<span>2+</span>
+							<span class="counter" data-count-to="2" data-suffix="+">0+</span>
 							<p>Years of Experience</p>
 						</div>
 					</div>
 				</div>
-				<div class="right">
+				<div class="right reveal">
 					<h3>Quick Facts</h3>
 					<div>
 						<p>Location</p>
@@ -139,51 +158,117 @@
 			</div>
 		</section>
 
+		<!-- Philosophy & Quotes Section -->
+		<section class="philosophy" id="philosophy">
+			<h1 class="section-title reveal">My <span>Philosophy</span></h1>
+			<div class="philosophy-body reveal">
+				<p>
+					I believe software turns imagination into reality. Every project begins with an idea and becomes a solution that
+					serves people. I love the process — the problem-solving, the late-night debugging, the small win when
+					something finally clicks into place.
+				</p>
+				<p>
+					I try to build with discipline, curiosity, and purpose, and to keep learning one project at a time. My faith
+					shapes how I work: it calls me to integrity, humility, excellence, and genuine service to the people who use
+					what I build.
+				</p>
+			</div>
+
+			<div class="quote-widget reveal" id="quote-widget" aria-live="polite">
+				<svg class="quote-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<path
+						d="M9.5 7C6 7 4 9.5 4 13c0 2.8 2 4.5 4.3 4.5.4 2-1.1 3.3-3.3 3.3v2c4 0 6.5-2.5 6.5-6.3V13c0-3.5-2-6-2-6ZM20 7c-3.5 0-5.5 2.5-5.5 6c0 2.8 2 4.5 4.3 4.5.4 2-1.1 3.3-3.3 3.3v2c4 0 6.5-2.5 6.5-6.3V13c0-3.5-2-6-2-6Z"
+						fill="currentColor"
+					/>
+				</svg>
+				<p class="quote-text" id="quote-text">Great software begins with a simple idea.</p>
+				<span class="quote-hint">A new thought every 30 seconds</span>
+			</div>
+		</section>
+
 		<!-- Skills Section -->
 		<section class="skills" id="skills">
-			<h1 class="section-title">Skills & <span>Services</span></h1>
+			<h1 class="section-title reveal">Skills & <span>Services</span></h1>
 			<div class="skill">
-				<div>
+				<div class="reveal">
 					<div class="icon">
 						<img src="./public/icons/code.svg" alt="" aria-hidden="true" />
 					</div>
-					<h3>Frontend Development</h3>
-					<p>React, TypeScript, Tailwind CSS</p>
-				</div>
-				<div>
-					<div class="icon">
-						<img src="./public/icons/server.svg" alt="" aria-hidden="true" />
+					<h3>Languages</h3>
+					<div class="tag-list">
+						<span>JavaScript</span>
+						<span>TypeScript</span>
+						<span>HTML5</span>
+						<span>CSS3</span>
 					</div>
-					<h3>Backend Development</h3>
-					<p>NodeJS</p>
 				</div>
-				<div>
+				<div class="reveal">
 					<div class="icon">
 						<img src="./public/icons/palette.svg" alt="" aria-hidden="true" />
 					</div>
-					<h3>UX/UI Design</h3>
-					<p>Figma, Canva, User-Centered Design</p>
-				</div>
-				<div>
-					<div class="icon">
-						<img src="./public/icons/cloud-upload.svg" alt="" aria-hidden="true" />
+					<h3>Frontend</h3>
+					<div class="tag-list">
+						<span>React.js</span>
+						<span>Responsive Design</span>
+						<span>Modern UI Development</span>
 					</div>
-					<h3>Deployment</h3>
-					<p>Vercel, GitHub Pages, Render, Neon</p>
 				</div>
-				<div>
+				<div class="reveal">
+					<div class="icon">
+						<img src="./public/icons/server.svg" alt="" aria-hidden="true" />
+					</div>
+					<h3>Backend</h3>
+					<div class="tag-list">
+						<span>Node.js</span>
+						<span>Express.js</span>
+					</div>
+				</div>
+				<div class="reveal">
 					<div class="icon">
 						<img src="./public/icons/database.svg" alt="" aria-hidden="true" />
 					</div>
-					<h3>Database</h3>
-					<p>PostgreSQL, MongoDB, Prisma</p>
-				</div>
-				<div>
-					<div class="icon">
-						<img src="./public/icons/gauge.svg" alt="" aria-hidden="true" />
+					<h3>Databases</h3>
+					<div class="tag-list">
+						<span>PostgreSQL</span>
+						<span>MongoDB</span>
+						<span>NeonDB</span>
 					</div>
-					<h3>Performance</h3>
-					<p>Optimization, SEO, Analytics</p>
+				</div>
+				<div class="reveal">
+					<div class="icon">
+						<img src="./public/icons/cloud-upload.svg" alt="" aria-hidden="true" />
+					</div>
+					<h3>Cloud & Deployment</h3>
+					<div class="tag-list">
+						<span>Vercel</span>
+						<span>Netlify</span>
+						<span>Railway</span>
+						<span>Render</span>
+					</div>
+				</div>
+				<div class="reveal">
+					<div class="icon">
+						<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+					</div>
+					<h3>Version Control</h3>
+					<div class="tag-list">
+						<span>Git</span>
+						<span>GitHub</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="expertise reveal">
+				<h3 class="expertise-title">Core Expertise</h3>
+				<div class="expertise-chips">
+					<span>Full-Stack Web Development</span>
+					<span>Mobile Application Development</span>
+					<span>Software Development</span>
+					<span>REST API Development</span>
+					<span>Authentication & Authorization</span>
+					<span>Database Design</span>
+					<span>Cloud Deployment</span>
+					<span>Performance Optimization</span>
 				</div>
 			</div>
 
@@ -199,7 +284,7 @@
 				</div>
 
 				<div class="sample" id="project-list">
-					<div class="project-card" data-tags="angular nest" tabindex="0">
+					<div class="project-card reveal" data-tags="angular nest" tabindex="0">
 						<img src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1200&q=80" alt="IM Investment e-commerce website preview" loading="lazy" />
 						<div>
 							<h3>IM Investment E-commerce</h3>
@@ -211,12 +296,15 @@
 							</div>
 							<div class="project-actions">
 								<button type="button" class="open-modal" aria-label="Open project details">Preview</button>
+								<button type="button" class="icon-btn" data-href="https://github.com/MarkOtwane" aria-label="View source on GitHub">
+									<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+								</button>
 								<button type="button" data-href="https://im-investments.vercel.app/" aria-label="View IM Investment live demo">View Live</button>
 							</div>
 						</div>
 					</div>
 
-					<div class="project-card" data-tags="php javascript" tabindex="0">
+					<div class="project-card reveal" data-tags="php javascript" tabindex="0">
 						<img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80" alt="Photography website preview" loading="lazy" />
 						<div>
 							<h3>Photography Website</h3>
@@ -227,12 +315,15 @@
 							</div>
 							<div class="project-actions">
 								<button type="button" class="open-modal" aria-label="Open project details">Preview</button>
+								<button type="button" class="icon-btn" data-href="https://github.com/MarkOtwane" aria-label="View source on GitHub">
+									<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+								</button>
 								<button type="button" data-href="https://photograph-studio.vercel.app/" aria-label="View Photography live demo">View Live</button>
 							</div>
 						</div>
 					</div>
 
-					<div class="project-card" data-tags="angular nest" tabindex="0">
+					<div class="project-card reveal" data-tags="angular nest" tabindex="0">
 						<img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80" alt="JML E-learning platform preview" loading="lazy" />
 						<div>
 							<h3>JML E-learning Platform</h3>
@@ -244,6 +335,9 @@
 							</div>
 							<div class="project-actions">
 								<button type="button" class="open-modal" aria-label="Open project details">Preview</button>
+								<button type="button" class="icon-btn" data-href="https://github.com/MarkOtwane" aria-label="View source on GitHub">
+									<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+								</button>
 								<button type="button" data-href="https://jlm-e-learning-platform.vercel.app/" aria-label="View JML live demo">View Live</button>
 							</div>
 						</div>
@@ -256,13 +350,13 @@
 
 		<!-- Testimonials Section -->
 		<section class="testimonials" id="testimonials">
-			<h1 class="section-title">What <span>Clients</span> Say</h1>
+			<h1 class="section-title reveal">What <span>Clients</span> Say</h1>
 			<div class="testimonial-list">
-				<blockquote>
+				<blockquote class="reveal">
 					<p>"Mark delivered an outstanding e-commerce solution on time — highly professional and communicative."</p>
 					<footer>- Client, IM Investment</footer>
 				</blockquote>
-				<blockquote>
+				<blockquote class="reveal">
 					<p>"Excellent attention to detail and thoughtful UI choices. Increased conversions after launch."</p>
 					<footer>- Photography Studio</footer>
 				</blockquote>
@@ -271,10 +365,10 @@
 
 		<!-- Contact Section (with simple form integration) -->
 		<section class="contact" id="contact">
-			<h1>Let's Work Together</h1>
-			<p>Have a project in mind? Fill out the form or use the contact cards below.</p>
+			<h1 class="reveal">Let's Work Together</h1>
+			<p class="reveal">Have a project in mind? Fill out the form or use the contact cards below.</p>
 
-			<form class="contact-form" id="contact-form" method="POST" action="https://formspree.io/f/xkoayrjd">
+			<form class="contact-form reveal" id="contact-form" method="POST" action="https://formspree.io/f/xkoayrjd">
 				<label for="name">Name</label>
 				<input type="text" id="name" name="name" required />
 
@@ -286,18 +380,19 @@
 
 				<button type="submit" class="btn">Send Message</button>
 			</form>
+			<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
 
 			<div class="socials">
-				<div>
+				<div class="reveal">
 					<div class="icon">
 						<img src="./public/icons/mail.svg" alt="Email icon" aria-hidden="true" />
 					</div>
-					<a href="mailto: otwanemark003@gmail.com">
+					<a href="mailto:otwanemark003@gmail.com">
 						<span>Email</span>
 						<p>otwanemark003@gmail.com</p>
 					</a>
 				</div>
-				<div>
+				<div class="reveal">
 					<div class="icon">
 						<img src="./public/icons/linkedin.svg" alt="LinkedIn icon" aria-hidden="true" />
 					</div>
@@ -306,7 +401,7 @@
 						<p>@otwanemark</p>
 					</a>
 				</div>
-				<div>
+				<div class="reveal">
 					<div class="icon">
 						<img src="./public/icons/github.svg" alt="GitHub icon" aria-hidden="true" />
 					</div>
@@ -318,10 +413,21 @@
 			</div>
 		</section>
 
+		<!-- Back to top -->
+		<button id="back-to-top" aria-label="Back to top">
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<path d="M12 19V5M5 12l7-7 7 7" />
+			</svg>
+		</button>
+
 		<!-- Project Modal / Lightbox -->
 		<div id="project-modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
 			<div class="modal-content">
-				<button class="modal-close" aria-label="Close">&times;</button>
+				<button class="modal-close" aria-label="Close">
+				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+					<path d="M4 4l16 16M20 4L4 20" />
+				</svg>
+			</button>
 				<h2 id="modal-title">Project Preview</h2>
 				<div class="modal-body"></div>
 			</div>
@@ -329,33 +435,65 @@
 
 		<!-- Footer -->
 		<footer>
-			<p>&copy; 2026 Mark Otwane. All rights reserved.</p>
-			<p>Developed by <a href="https://microtech-solutions.vercel.app/" target="_blank" rel="noopener noreferrer">Microtech Solutions Limited</a></p>
+			<div class="footer-inner">
+				<div class="footer-brand">
+					<a class="brand" href="#home">Mark Otwane</a>
+					<p>Building impactful digital solutions with discipline, curiosity, and purpose.</p>
+				</div>
+
+				<nav class="footer-links" aria-label="Footer navigation">
+					<a href="#home">Home</a>
+					<a href="#about">About</a>
+					<a href="#philosophy">Philosophy</a>
+					<a href="#skills">Skills</a>
+					<a href="#contact">Contact</a>
+				</nav>
+
+				<div class="footer-socials">
+					<a href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+						<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+					</a>
+					<a href="https://www.instagram.com/otwanemark" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
+						<img src="./public/icons/instagram.svg" alt="" aria-hidden="true" />
+					</a>
+					<a href="https://www.linkedin.com/in/mark-otwane-800871349" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+						<img src="./public/icons/linkedin.svg" alt="" aria-hidden="true" />
+					</a>
+					<button type="button" class="footer-top" id="footer-back-to-top" aria-label="Back to top">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M12 19V5M5 12l7-7 7 7" />
+						</svg>
+						Back to top
+					</button>
+				</div>
+			</div>
+
+			<div class="footer-bottom">
+				<p>&copy; 2026 Mark Otwane. All rights reserved.</p>
+				<p>
+					Designed &amp; Developed by
+					<a href="https://microtech-solutions.onrender.com/" target="_blank" rel="noopener noreferrer">Microtech Solutions</a>
+				</p>
+			</div>
 		</footer>
 
-		<!-- Theme Toggle Script -->
+		<!-- Theme toggle -->
 		<script>
 			(function () {
 				const toggle = document.getElementById("theme-toggle");
-				if (!toggle) return;
-				const icon = toggle.querySelector("i");
 				const body = document.body;
-
-				function updateIcon(theme) {
-					if (!icon) return;
-					icon.className = theme === "dark" ? "fas fa-sun" : "fas fa-moon";
-				}
 
 				function setTheme(theme) {
 					body.classList.remove("light", "dark");
 					body.classList.add(theme);
 					localStorage.setItem("theme", theme);
-					updateIcon(theme);
 				}
 
-				toggle.addEventListener("click", () => {
-					setTheme(body.classList.contains("dark") ? "light" : "dark");
-				});
+				if (toggle) {
+					toggle.addEventListener("click", () => {
+						setTheme(body.classList.contains("dark") ? "light" : "dark");
+					});
+				}
 
 				const saved = localStorage.getItem("theme");
 				if (saved) {
@@ -367,124 +505,113 @@
 			})();
 		</script>
 
-		<!-- Improved Animation Script -->
+		<!-- Scroll progress + nav glass state + section dot nav + back-to-top -->
 		<script>
-			// Initialize animations only after everything is loaded
-			window.addEventListener("load", function () {
-				console.log("Page loaded, checking GSAP...");
+			(function () {
+				const progress = document.getElementById("scroll-progress");
+				const topNav = document.querySelector("nav[role='navigation']");
+				const backToTop = document.getElementById("back-to-top");
+				const dots = document.querySelectorAll(".section-dots a");
+				const navLinks = document.querySelectorAll(".nav-list a");
+				const sections = document.querySelectorAll("section[id]");
 
-				// Function to ensure content visibility
-				function ensureContentVisibility() {
-					const elements = document.querySelectorAll(".skill > div, .projects .sample > div, .socials > div");
-					elements.forEach((el, index) => {
-						// Always ensure content is visible
-						el.style.opacity = "1";
-						el.style.transform = "none";
-						el.style.visibility = "visible";
+				function onScroll() {
+					const scrollTop = window.scrollY;
+					const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+					const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+					if (progress) progress.style.width = pct + "%";
 
-						console.log(`Ensured visibility for element ${index + 1}:`, el.querySelector("h3")?.textContent || el.querySelector("span")?.textContent);
-					});
+					if (topNav) topNav.classList.toggle("scrolled", scrollTop > 8);
+					if (backToTop) backToTop.classList.toggle("visible", scrollTop > 600);
 				}
 
-				// Run immediately
-				ensureContentVisibility();
+				window.addEventListener("scroll", onScroll, { passive: true });
+				onScroll();
 
-				// Run again after 1 second as safety
-				setTimeout(ensureContentVisibility, 1000);
+				const footerBackToTop = document.getElementById("footer-back-to-top");
+				[backToTop, footerBackToTop].forEach((button) => {
+					if (!button) return;
+					button.addEventListener("click", () => {
+						window.scrollTo({ top: 0, behavior: "smooth" });
+					});
+				});
 
-				// Run again after 3 seconds as extra safety
-				setTimeout(ensureContentVisibility, 3000);
+				if (sections.length && "IntersectionObserver" in window) {
+					const sectionObserver = new IntersectionObserver(
+						(entries) => {
+							entries.forEach((entry) => {
+								if (!entry.isIntersecting) return;
+								const id = entry.target.getAttribute("id");
 
-				// Check if GSAP is loaded
-				if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
-					console.warn("GSAP not loaded - using fallback animations only");
+								navLinks.forEach((link) => {
+									link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+								});
+								dots.forEach((dot) => {
+									dot.classList.toggle("active", dot.getAttribute("data-target") === id);
+								});
+							});
+						},
+						{ rootMargin: "-45% 0px -45% 0px" }
+					);
+					sections.forEach((section) => sectionObserver.observe(section));
+				}
+			})();
+		</script>
+
+		<!-- Reveal-on-scroll + animated stat counters -->
+		<script>
+			(function () {
+				const revealEls = document.querySelectorAll(".reveal");
+				if (!revealEls.length) return;
+
+				if (!("IntersectionObserver" in window)) {
+					revealEls.forEach((el) => el.classList.add("in-view"));
 					return;
 				}
 
-				console.log("GSAP loaded successfully, setting up animations...");
-
-				try {
-					gsap.registerPlugin(ScrollTrigger);
-
-					// Simple hero animations
-					gsap.from(".home .main img", {
-						duration: 1,
-						scale: 0.8,
-						opacity: 0,
-						ease: "back.out(1.7)",
-					});
-
-					// Section animations with better visibility handling
-					const sections = [".about", ".skills", ".projects", ".contact"];
-
-					sections.forEach((section) => {
-						gsap.from(section, {
-							scrollTrigger: {
-								trigger: section,
-								start: "top 90%",
-								toggleActions: "play none none none",
-							},
-							duration: 0.8,
-							y: 20,
-							opacity: 0,
-							ease: "power3.out",
-							onComplete: function () {
-								// Ensure content is visible after animation
-								const skillCards = document.querySelectorAll(".skill > div, .projects .sample > div, .socials > div");
-								skillCards.forEach((card) => {
-									card.style.opacity = "1";
-									card.style.transform = "none";
-								});
-							},
+				const revealObserver = new IntersectionObserver(
+					(entries, observer) => {
+						entries.forEach((entry) => {
+							if (!entry.isIntersecting) return;
+							entry.target.classList.add("in-view");
+							observer.unobserve(entry.target);
 						});
-					});
+					},
+					{ threshold: 0.15 }
+				);
+				revealEls.forEach((el) => revealObserver.observe(el));
 
-					// Simple smooth scroll
-					document.querySelectorAll('nav a[href^="#"]').forEach((anchor) => {
-						anchor.addEventListener("click", function (e) {
-							e.preventDefault();
-							const target = document.querySelector(this.getAttribute("href"));
-							if (target) {
-								target.scrollIntoView({
-									behavior: "smooth",
-									block: "start",
-								});
-							}
-						});
-					});
+				const counters = document.querySelectorAll(".counter");
+				if (counters.length) {
+					const counterObserver = new IntersectionObserver(
+						(entries, observer) => {
+							entries.forEach((entry) => {
+								if (!entry.isIntersecting) return;
+								const el = entry.target;
+								const target = parseInt(el.getAttribute("data-count-to"), 10) || 0;
+								const suffix = el.getAttribute("data-suffix") || "";
+								const duration = 1200;
+								const start = performance.now();
 
-					// Update active nav link
-					const navLinks = document.querySelectorAll("nav a");
-					const sections_for_nav = document.querySelectorAll("section[id]");
-
-					window.addEventListener("scroll", () => {
-						let current = "";
-						sections_for_nav.forEach((section) => {
-							const sectionTop = section.offsetTop;
-							if (scrollY >= sectionTop - 100) {
-								current = section.getAttribute("id");
-							}
-						});
-
-						navLinks.forEach((link) => {
-							link.classList.remove("active");
-							if (link.getAttribute("href") === `#${current}`) {
-								link.classList.add("active");
-							}
-						});
-					});
-
-					console.log("Animations set up successfully");
-				} catch (error) {
-					console.error("Animation setup failed:", error);
-					ensureContentVisibility();
+								function tick(now) {
+									const progress = Math.min((now - start) / duration, 1);
+									const eased = 1 - Math.pow(1 - progress, 3);
+									el.textContent = Math.round(eased * target) + suffix;
+									if (progress < 1) requestAnimationFrame(tick);
+								}
+								requestAnimationFrame(tick);
+								observer.unobserve(el);
+							});
+						},
+						{ threshold: 0.6 }
+					);
+					counters.forEach((el) => counterObserver.observe(el));
 				}
-			});
+			})();
 		</script>
 
-		<!-- Interactive helpers: mobile nav, filters, modal, and form enhancements -->
+		<!-- Mobile nav toggle -->
 		<script>
-			// Mobile nav toggle
 			(function () {
 				const navToggle = document.getElementById("nav-toggle");
 				const navList = document.getElementById("primary-navigation");
@@ -502,8 +629,39 @@
 					});
 				}
 			})();
+		</script>
 
-			// Button links
+		<!-- Smooth-scroll anchor links -->
+		<script>
+			(function () {
+				document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+					anchor.addEventListener("click", function (e) {
+						const targetId = this.getAttribute("href");
+						if (targetId === "#") return;
+						const target = document.querySelector(targetId);
+						if (target) {
+							e.preventDefault();
+							target.scrollIntoView({ behavior: "smooth", block: "start" });
+						}
+					});
+				});
+			})();
+		</script>
+
+		<!-- Scroll-target buttons (hero CTAs) -->
+		<script>
+			(function () {
+				document.querySelectorAll("button[data-scroll]").forEach((button) => {
+					button.addEventListener("click", () => {
+						const target = document.querySelector(button.getAttribute("data-scroll"));
+						if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+					});
+				});
+			})();
+		</script>
+
+		<!-- Button links -->
+		<script>
 			(function () {
 				document.querySelectorAll("button[data-href]").forEach((button) => {
 					button.addEventListener("click", () => {
@@ -517,8 +675,10 @@
 					});
 				});
 			})();
+		</script>
 
-			// Project filters
+		<!-- Project filters -->
+		<script>
 			(function () {
 				const buttons = document.querySelectorAll(".filter-btn");
 				const cards = document.querySelectorAll(".project-card");
@@ -535,8 +695,10 @@
 					});
 				});
 			})();
+		</script>
 
-			// Modal for project preview
+		<!-- Modal for project preview -->
+		<script>
 			(function () {
 				const modal = document.getElementById("project-modal");
 				const modalBody = modal && modal.querySelector(".modal-body");
@@ -564,7 +726,7 @@
 						const title = card.querySelector("h3")?.textContent || "Preview";
 						const img = card.querySelector("img")?.src || "";
 						const desc = card.querySelector("p")?.textContent || "";
-						openModal(`<img src="${img}" alt="${title}" style="width:100%;height:auto;border-radius:8px;"/><h3>${title}</h3><p>${desc}</p>`);
+						openModal(`<img src="${img}" alt="${title}"/><h3>${title}</h3><p>${desc}</p>`);
 					});
 				});
 
@@ -577,17 +739,23 @@
 					if (e.key === "Escape") closeModal();
 				});
 			})();
+		</script>
 
-			// Contact form: provide friendly UX after submit
+		<!-- Contact form: friendly submit feedback -->
+		<script>
 			(function () {
 				const form = document.getElementById("contact-form");
+				const status = document.getElementById("form-status");
 				if (!form) return;
-				form.addEventListener("submit", (e) => {
-					// Allow normal submission to Formspree; show immediate feedback
+				form.addEventListener("submit", () => {
 					const btn = form.querySelector('button[type="submit"]');
 					if (btn) {
 						btn.disabled = true;
 						btn.textContent = "Sending...";
+					}
+					if (status) {
+						status.textContent = "Sending your message...";
+						status.className = "form-status";
 					}
 					setTimeout(() => {
 						if (btn) {
@@ -596,6 +764,76 @@
 						}
 					}, 3000);
 				});
+			})();
+		</script>
+
+		<!-- Button ripple micro-interaction -->
+		<script>
+			(function () {
+				const selector = ".btn-cta, .filter-btn, .project-actions button, .contact-form button.btn, .projects > button.btn";
+				document.addEventListener("click", (e) => {
+					const button = e.target.closest(selector);
+					if (!button) return;
+
+					const rect = button.getBoundingClientRect();
+					const size = Math.max(rect.width, rect.height) * 1.6;
+					const ripple = document.createElement("span");
+					ripple.className = "ripple-span";
+					ripple.style.width = ripple.style.height = size + "px";
+					ripple.style.left = e.clientX - rect.left - size / 2 + "px";
+					ripple.style.top = e.clientY - rect.top - size / 2 + "px";
+
+					button.appendChild(ripple);
+					ripple.addEventListener("animationend", () => ripple.remove());
+				});
+			})();
+		</script>
+
+		<!-- Dynamic inspirational quote generator -->
+		<script>
+			(function () {
+				const quoteText = document.getElementById("quote-text");
+				if (!quoteText) return;
+
+				const quotes = [
+					"Great software begins with a simple idea.",
+					"Code with excellence. Build with purpose.",
+					"Faith gives purpose. Code creates solutions.",
+					"Every bug solved is another lesson learned.",
+					"Keep learning. Keep building. Keep serving.",
+					"Discipline turns ideas into working software.",
+					"Creativity is intelligence having fun with code.",
+					"Innovation is born where curiosity meets consistency.",
+					"Serve people well, and your code will matter.",
+					"Excellence is a habit, not an accident.",
+					"Every line of code is a small act of purpose.",
+					"Problems are just features waiting to be understood.",
+					"Growth happens one commit at a time.",
+					"Purposeful work outlasts perfect code.",
+					"Humility keeps a good engineer teachable.",
+					"An idea becomes real the moment you start building.",
+				];
+
+				let currentIndex = Math.floor(Math.random() * quotes.length);
+				quoteText.textContent = quotes[currentIndex];
+
+				function showNextQuote() {
+					let nextIndex = Math.floor(Math.random() * quotes.length);
+					if (quotes.length > 1) {
+						while (nextIndex === currentIndex) {
+							nextIndex = Math.floor(Math.random() * quotes.length);
+						}
+					}
+					currentIndex = nextIndex;
+
+					quoteText.classList.add("fading");
+					setTimeout(() => {
+						quoteText.textContent = quotes[currentIndex];
+						quoteText.classList.remove("fading");
+					}, 400);
+				}
+
+				setInterval(showNextQuote, 30000);
 			})();
 		</script>
 	</body>
