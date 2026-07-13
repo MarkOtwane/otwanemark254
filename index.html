@@ -27,46 +27,148 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-		<!-- Main Stylesheet -->
+		<!-- Fonts -->
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Theme boot: set html.dark before paint to avoid a flash -->
+		<script>
+			(function () {
+				try {
+					var saved = localStorage.getItem("theme");
+					var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+					document.documentElement.classList.toggle("dark", dark);
+				} catch (e) {}
+			})();
+		</script>
+
+		<!-- Tailwind CSS (utility-first styling, JIT via CDN) -->
+		<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+		<script>
+			tailwind.config = {
+				darkMode: "class",
+				theme: {
+					extend: {
+						colors: {
+							primary: "rgb(var(--color-primary) / <alpha-value>)",
+							"on-primary": "rgb(var(--color-on-primary) / <alpha-value>)",
+							"primary-container": "rgb(var(--color-primary-container) / <alpha-value>)",
+							"on-primary-container": "rgb(var(--color-on-primary-container) / <alpha-value>)",
+							secondary: "rgb(var(--color-secondary) / <alpha-value>)",
+							"on-secondary": "rgb(var(--color-on-secondary) / <alpha-value>)",
+							tertiary: "rgb(var(--color-tertiary) / <alpha-value>)",
+							"on-tertiary": "rgb(var(--color-on-tertiary) / <alpha-value>)",
+							background: "rgb(var(--color-background) / <alpha-value>)",
+							"on-background": "rgb(var(--color-on-background) / <alpha-value>)",
+							surface: "rgb(var(--color-surface) / <alpha-value>)",
+							"on-surface": "rgb(var(--color-on-surface) / <alpha-value>)",
+							"on-surface-variant": "rgb(var(--color-on-surface-variant) / <alpha-value>)",
+							"surface-container-lowest": "rgb(var(--color-surface-container-lowest) / <alpha-value>)",
+							"surface-container-low": "rgb(var(--color-surface-container-low) / <alpha-value>)",
+							"surface-container": "rgb(var(--color-surface-container) / <alpha-value>)",
+							"surface-container-high": "rgb(var(--color-surface-container-high) / <alpha-value>)",
+							"surface-container-highest": "rgb(var(--color-surface-container-highest) / <alpha-value>)",
+							outline: "rgb(var(--color-outline) / <alpha-value>)",
+							"outline-variant": "rgb(var(--color-outline-variant) / <alpha-value>)",
+							error: "rgb(var(--color-error) / <alpha-value>)",
+							"on-error": "rgb(var(--color-on-error) / <alpha-value>)",
+						},
+						borderRadius: {
+							"2xl": "1.5rem",
+							"3xl": "1.75rem",
+						},
+						maxWidth: {
+							"container-max": "1200px",
+						},
+						spacing: {
+							"stack-sm": "8px",
+							"stack-md": "16px",
+							"stack-lg": "32px",
+							gutter: "24px",
+							"section-gap": "clamp(64px, 10vw, 120px)",
+							"margin-mobile": "16px",
+						},
+						fontFamily: {
+							sans: ["Inter", "sans-serif"],
+							mono: ["JetBrains Mono", "monospace"],
+						},
+						fontSize: {
+							display: ["64px", { lineHeight: "72px", letterSpacing: "-0.02em", fontWeight: "700" }],
+							"headline-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+							"headline-md": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+							"body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+							"body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+							"label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+							"code-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+						},
+					},
+				},
+			};
+		</script>
+
+		<!-- Main Stylesheet (design tokens + the bits Tailwind can't do) -->
 		<link rel="stylesheet" href="style.css" />
+
+		<style>
+			.material-symbols-outlined {
+				font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+			}
+		</style>
 	</head>
-	<body>
+	<body class="bg-background text-on-surface font-sans selection:bg-primary/30 antialiased">
 		<!-- Scroll progress -->
-		<div id="scroll-progress" aria-hidden="true"></div>
+		<div class="fixed top-0 left-0 h-1 bg-primary z-[100] w-full" id="progress-bar"></div>
 
 		<!-- Navigation -->
-		<nav class="site-nav" role="navigation" aria-label="Main navigation">
-			<div class="nav-inner">
-				<a class="brand" href="#home">Mark Otwane</a>
+		<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-on-surface/10 shadow-sm transition-all duration-300" id="top-nav">
+			<div class="max-w-container-max mx-auto px-gutter h-20 flex justify-between items-center">
+				<a class="flex items-center gap-2" href="#home">
+					<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1">terminal</span>
+					<span class="font-headline-md text-xl font-bold text-on-surface">Mark Otwane</span>
+				</a>
 
-				<ul id="primary-navigation" class="nav-list">
-					<li><a href="#home" class="active">Home</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#skills">Skills</a></li>
-					<li><a href="#contact">Contact</a></li>
-				</ul>
-
-				<div class="nav-right">
-					<!-- Theme toggle button -->
-					<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-						<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-							<circle cx="12" cy="12" r="4.2" />
-							<path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7" />
-						</svg>
-						<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-							<path d="M20.5 14.5a8.5 8.5 0 1 1-9-11 6.7 6.7 0 0 0 9 11Z" />
-						</svg>
+				<div class="hidden md:flex items-center gap-stack-lg" id="primary-navigation">
+					<a class="nav-link font-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#home">Home</a>
+					<a class="nav-link font-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#about">About</a>
+					<a class="nav-link font-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#skills">Skills</a>
+					<a class="nav-link font-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#projects">Projects</a>
+					<a class="nav-link font-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#contact">Contact</a>
+					<button type="button" class="p-2 rounded-full hover:bg-surface-container-high transition-colors relative w-9 h-9" id="theme-toggle" aria-label="Toggle dark mode">
+						<span class="material-symbols-outlined icon-sun text-primary absolute inset-0 flex items-center justify-center">light_mode</span>
+						<span class="material-symbols-outlined icon-moon text-primary absolute inset-0 flex items-center justify-center">dark_mode</span>
 					</button>
+				</div>
 
-					<button id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-navigation" class="nav-toggle">
-						<span class="nav-toggle-bars"><span></span><span></span><span></span></span>
+				<div class="flex items-center gap-2 md:hidden">
+					<button type="button" class="p-2 rounded-full hover:bg-surface-container-high transition-colors relative w-9 h-9" id="theme-toggle-mobile" aria-label="Toggle dark mode">
+						<span class="material-symbols-outlined icon-sun text-primary absolute inset-0 flex items-center justify-center">light_mode</span>
+						<span class="material-symbols-outlined icon-moon text-primary absolute inset-0 flex items-center justify-center">dark_mode</span>
+					</button>
+					<button type="button" class="p-2 text-on-surface" id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+						<span class="material-symbols-outlined">menu</span>
 					</button>
 				</div>
 			</div>
 		</nav>
 
+		<!-- Mobile Nav -->
+		<div class="fixed inset-0 bg-surface z-[60] flex flex-col items-center justify-center gap-8 md:hidden" id="mobile-nav">
+			<button type="button" class="absolute top-6 right-6" id="close-mobile-menu" aria-label="Close menu">
+				<span class="material-symbols-outlined text-3xl">close</span>
+			</button>
+			<a class="text-2xl font-bold" href="#home">Home</a>
+			<a class="text-2xl font-bold" href="#about">About</a>
+			<a class="text-2xl font-bold" href="#philosophy">Philosophy</a>
+			<a class="text-2xl font-bold" href="#skills">Skills</a>
+			<a class="text-2xl font-bold" href="#projects">Projects</a>
+			<a class="text-2xl font-bold" href="#contact">Contact</a>
+		</div>
+
 		<!-- Section dot navigation -->
-		<nav class="section-dots" aria-label="Section navigation">
+		<nav class="section-dots fixed right-6 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-40" aria-label="Section navigation">
 			<a href="#home" data-target="home" data-label="Home" aria-label="Home" class="active"></a>
 			<a href="#about" data-target="about" data-label="About" aria-label="About"></a>
 			<a href="#philosophy" data-target="philosophy" data-label="Philosophy" aria-label="Philosophy"></a>
@@ -76,514 +178,739 @@
 		</nav>
 
 		<!-- Hero Section -->
-		<section class="home" id="home">
-			<div class="main">
-				<img src="./mark.png" alt="Mark Otwane - Software Engineer" loading="eager" />
-				<div class="description">
-					<h1>Mark Otwane</h1>
-					<h2>Software Engineer | Python Expert | React | Node JS | React Native</h2>
-					<p>I create beautiful, functional and user-centered digital experiences that solve real-world problems</p>
-					<div class="btn">
-						<button type="button" class="btn-cta btn-cta--primary" data-scroll="#projects" aria-label="View my projects">View Projects</button>
-						<button type="button" class="btn-cta btn-cta--outline" data-scroll="#contact" aria-label="Contact me">Contact Me</button>
-						<button
-							type="button"
-							class="btn-cta btn-cta--outline"
-							data-href="https://docs.google.com/document/d/1r4snkaaciF3vH-895hGN5rwstweFeoOyTBtIpTnyP3g/edit?usp=sharing"
-							aria-label="Download my resume"
+		<header class="relative min-h-screen flex items-center pt-20 overflow-hidden" id="home">
+			<div class="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10"></div>
+			<div class="absolute -top-40 -right-32 w-[36rem] h-[36rem] rounded-full bg-primary/10 blur-3xl -z-10"></div>
+			<div class="absolute -bottom-40 -left-32 w-[30rem] h-[30rem] rounded-full bg-secondary/10 blur-3xl -z-10"></div>
+
+			<div class="relative z-10 max-w-container-max mx-auto px-gutter grid lg:grid-cols-2 gap-stack-lg items-center">
+				<div class="reveal">
+					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary mb-6">
+						<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">verified</span>
+						<span class="font-label-caps text-label-caps">AVAILABLE FOR OPPORTUNITIES</span>
+					</div>
+
+					<h1 class="font-sans text-4xl sm:text-5xl lg:text-display text-on-surface mb-4 font-bold tracking-tight">
+						Mark <span class="text-primary">Otwane</span>
+					</h1>
+					<p class="font-headline-md text-xl sm:text-2xl text-on-surface-variant font-semibold mb-6">
+						Software Engineer | Python Expert | React | Node JS | React Native
+					</p>
+					<p class="font-body-lg text-body-lg text-on-surface-variant/90 max-w-xl mb-10">
+						I create beautiful, functional and user-centered digital experiences that solve real-world problems.
+					</p>
+
+					<div class="flex flex-wrap gap-4 mb-10">
+						<a
+							class="px-8 py-3 bg-gradient-to-r from-[#6366f1] to-[#0ea5e9] text-white font-bold rounded-lg hover:brightness-110 shadow-lg hover:shadow-primary/20 transition-all relative overflow-hidden"
+							href="#projects"
+							data-ripple
+							data-ripple-tint="white"
+						>
+							View Projects
+						</a>
+						<a
+							class="px-8 py-3 glass-card text-on-surface font-bold rounded-lg hover:bg-on-surface/10 transition-all relative overflow-hidden"
+							href="#contact"
+							data-ripple
+							data-ripple-tint="primary"
+						>
+							Contact Me
+						</a>
+						<a
+							class="px-8 py-3 text-primary border border-primary/30 hover:bg-primary/10 rounded-lg transition-all relative overflow-hidden"
+							href="https://docs.google.com/document/d/1r4snkaaciF3vH-895hGN5rwstweFeoOyTBtIpTnyP3g/edit?usp=sharing"
+							target="_blank"
+							rel="noopener noreferrer"
+							data-ripple
+							data-ripple-tint="primary"
 						>
 							Download Resume
-						</button>
+						</a>
 					</div>
-					<div class="social-links" role="list" aria-label="Social media links">
-						<a href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-							<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+
+					<div class="flex gap-6" role="list" aria-label="Social media links">
+						<a class="text-on-surface-variant hover:text-primary transition-all" href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+							<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path
+									d="M12 .297c-6.63 0-12 5.373-12 12c0 5.303 3.438 9.8 8.205 11.385c.6.113.82-.258.82-.577c0-.285-.01-1.04-.015-2.04c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729c1.205.084 1.838 1.236 1.838 1.236c1.07 1.835 2.809 1.305 3.495.998c.108-.776.417-1.305.76-1.605c-2.665-.3-5.466-1.332-5.466-5.93c0-1.31.465-2.38 1.235-3.22c-.135-.303-.54-1.523.105-3.176c0 0 1.005-.322 3.3 1.23c.96-.267 1.98-.399 3-.405c1.02.006 2.04.138 3 .405c2.28-1.552 3.285-1.23 3.285-1.23c.645 1.653.24 2.873.12 3.176c.765.84 1.23 1.91 1.23 3.22c0 4.61-2.805 5.625-5.475 5.92c.42.36.81 1.096.81 2.22c0 1.606-.015 2.896-.015 3.286c0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+								/>
+							</svg>
 						</a>
-						<a href="https://www.instagram.com/otwanemark" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
-							<img src="./public/icons/instagram.svg" alt="" aria-hidden="true" />
+						<a class="text-on-surface-variant hover:text-primary transition-all" href="https://www.instagram.com/otwanemark" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path
+									d="M7.03.084c-1.277.06-2.149.264-2.91.563a5.9 5.9 0 0 0-2.124 1.388a5.9 5.9 0 0 0-1.38 2.127C.321 4.926.12 5.8.064 7.076s-.069 1.688-.063 4.947s.021 3.667.083 4.947c.061 1.277.264 2.149.563 2.911c.308.789.72 1.457 1.388 2.123a5.9 5.9 0 0 0 2.129 1.38c.763.295 1.636.496 2.913.552c1.278.056 1.689.069 4.947.063s3.668-.021 4.947-.082c1.28-.06 2.147-.265 2.91-.563a5.9 5.9 0 0 0 2.123-1.388a5.9 5.9 0 0 0 1.38-2.129c.295-.763.496-1.636.551-2.912c.056-1.28.07-1.69.063-4.948c-.006-3.258-.02-3.667-.081-4.947c-.06-1.28-.264-2.148-.564-2.911a5.9 5.9 0 0 0-1.387-2.123a5.9 5.9 0 0 0-2.128-1.38c-.764-.294-1.636-.496-2.914-.55C15.647.009 15.236-.006 11.977 0S8.31.021 7.03.084m.14 21.693c-1.17-.05-1.805-.245-2.228-.408a3.7 3.7 0 0 1-1.382-.895a3.7 3.7 0 0 1-.9-1.378c-.165-.423-.363-1.058-.417-2.228c-.06-1.264-.072-1.644-.08-4.848c-.006-3.204.006-3.583.061-4.848c.05-1.169.246-1.805.408-2.228c.216-.561.477-.96.895-1.382a3.7 3.7 0 0 1 1.379-.9c.423-.165 1.057-.361 2.227-.417c1.265-.06 1.644-.072 4.848-.08c3.203-.006 3.583.006 4.85.062c1.168.05 1.804.244 2.227.408c.56.216.96.475 1.382.895s.681.817.9 1.378c.165.422.362 1.056.417 2.227c.06 1.265.074 1.645.08 4.848c.005 3.203-.006 3.583-.061 4.848c-.051 1.17-.245 1.805-.408 2.23c-.216.56-.477.96-.896 1.38a3.7 3.7 0 0 1-1.378.9c-.422.165-1.058.362-2.226.418c-1.266.06-1.645.072-4.85.079s-3.582-.006-4.848-.06m9.783-16.192a1.44 1.44 0 1 0 1.437-1.442a1.44 1.44 0 0 0-1.437 1.442M5.839 12.012a6.161 6.161 0 1 0 12.323-.024a6.162 6.162 0 0 0-12.323.024M8 12.008A4 4 0 1 1 12.008 16A4 4 0 0 1 8 12.008"
+								/>
+							</svg>
 						</a>
-						<a href="https://www.linkedin.com/in/mark-otwane-800871349" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-							<img src="./public/icons/linkedin.svg" alt="" aria-hidden="true" />
+						<a class="text-on-surface-variant hover:text-primary transition-all" href="https://www.linkedin.com/in/mark-otwane-800871349" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path
+									d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037c-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85c3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.06 2.06 0 0 1-2.063-2.065a2.064 2.064 0 1 1 2.063 2.065m1.782 13.019H3.555V9h3.564zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"
+								/>
+							</svg>
 						</a>
+					</div>
+				</div>
+
+				<div class="flex justify-center reveal" style="transition-delay: 200ms">
+					<div class="hero-photo-frame relative w-64 sm:w-72 lg:w-80 rounded-3xl overflow-hidden glass-card p-2">
+						<div class="w-full rounded-2xl overflow-hidden bg-surface-container-low">
+							<img src="./mark.png" alt="Mark Otwane - Software Engineer" loading="eager" />
+						</div>
 					</div>
 				</div>
 			</div>
-		</section>
+		</header>
 
 		<!-- About Section -->
-		<section class="about" id="about">
-			<h1 class="section-title reveal">About <span>Me</span></h1>
-			<div class="description">
-				<div class="left reveal">
-					<div class="top">
-						<p>Highly motivated software engineer with 2+ years of experience in creating impactful digital solutions. Skilled in:</p>
-						<ul>
-							<li>Python (Automation)</li>
-							<li>Frontend: React, TypeScript</li>
-							<li>Backend: Node JS</li>
-							<li>Databases: Postgres, MongoDB, Prisma, NeonDB</li>
-						</ul>
-						<p>When I'm not coding, you can find me exploring new technologies, contributing to open source projects, or sharing knowledge with the developer community.</p>
-					</div>
-					<div class="bottom">
-						<div>
-							<span class="counter" data-count-to="50" data-suffix="+">0+</span>
-							<p>Completed Projects</p>
+		<section class="py-section-gap" id="about">
+			<div class="max-w-container-max mx-auto px-gutter">
+				<div class="grid lg:grid-cols-2 gap-stack-lg items-center">
+					<div class="reveal">
+						<h2 class="font-headline-lg text-3xl sm:text-headline-lg mb-6 font-bold">About <span class="text-primary">Me</span></h2>
+						<p class="font-body-lg text-body-lg text-on-surface-variant mb-6">
+							Highly motivated software engineer with 2+ years of experience in creating impactful digital solutions. I'm
+							skilled in Python automation, React &amp; TypeScript on the frontend, Node JS on the backend, and databases
+							like Postgres, MongoDB, Prisma, and NeonDB.
+						</p>
+						<p class="font-body-md text-body-md text-on-surface-variant/80 mb-8">
+							When I'm not coding, you can find me exploring new technologies, contributing to open source projects, or
+							sharing knowledge with the developer community.
+						</p>
+						<div class="grid grid-cols-2 gap-4">
+							<div class="p-6 glass-card rounded-xl text-center">
+								<div class="text-primary font-bold text-4xl mb-1 counter" data-count-to="50" data-suffix="+">0+</div>
+								<p class="text-xs text-on-surface-variant">Completed Projects</p>
+							</div>
+							<div class="p-6 glass-card rounded-xl text-center">
+								<div class="text-primary font-bold text-4xl mb-1 counter" data-count-to="2" data-suffix="+">0+</div>
+								<p class="text-xs text-on-surface-variant">Years of Experience</p>
+							</div>
 						</div>
-						<div>
-							<span class="counter" data-count-to="2" data-suffix="+">0+</span>
-							<p>Years of Experience</p>
+					</div>
+
+					<div class="glass-card p-8 rounded-2xl reveal" style="transition-delay: 200ms">
+						<h3 class="text-xl font-bold mb-6 text-primary">Quick Facts</h3>
+						<div class="space-y-4">
+							<div class="flex justify-between items-center py-3 border-b border-outline-variant">
+								<span class="font-semibold text-on-surface">Location</span>
+								<span class="text-on-surface-variant">Chuka, Kenya</span>
+							</div>
+							<div class="flex justify-between items-center py-3 border-b border-outline-variant">
+								<span class="font-semibold text-on-surface">Experience</span>
+								<span class="text-on-surface-variant">2+ years</span>
+							</div>
+							<div class="flex justify-between items-center py-3 border-b border-outline-variant">
+								<span class="font-semibold text-on-surface">Availability</span>
+								<span class="inline-block px-3 py-1 bg-green-500 text-white rounded-full text-xs font-semibold uppercase">Available</span>
+							</div>
+							<div class="flex justify-between items-center py-3">
+								<span class="font-semibold text-on-surface">Stack</span>
+								<span class="text-on-surface-variant">MERN Python</span>
+							</div>
 						</div>
-					</div>
-				</div>
-				<div class="right reveal">
-					<h3>Quick Facts</h3>
-					<div>
-						<p>Location</p>
-						<p>Chuka, Kenya</p>
-					</div>
-					<div>
-						<p>Experience</p>
-						<p>2+ years</p>
-					</div>
-					<div>
-						<p>Availability</p>
-						<p><span>Available</span></p>
-					</div>
-					<div>
-						<p>Stack</p>
-						<p>MERN Python</p>
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<!-- Philosophy & Quotes Section -->
-		<section class="philosophy" id="philosophy">
-			<h1 class="section-title reveal">My <span>Philosophy</span></h1>
-			<div class="philosophy-body reveal">
-				<p>
-					I believe software turns imagination into reality. Every project begins with an idea and becomes a solution that
-					serves people. I love the process — the problem-solving, the late-night debugging, the small win when
-					something finally clicks into place.
-				</p>
-				<p>
-					I try to build with discipline, curiosity, and purpose, and to keep learning one project at a time. My faith
-					shapes how I work: it calls me to integrity, humility, excellence, and genuine service to the people who use
-					what I build.
-				</p>
-			</div>
+		<section class="py-section-gap bg-surface-container-lowest/50" id="philosophy">
+			<div class="max-w-container-max mx-auto px-gutter text-center">
+				<h2 class="font-headline-lg text-3xl sm:text-headline-lg mb-12 font-bold reveal">My <span class="text-primary">Philosophy</span></h2>
 
-			<div class="quote-widget reveal" id="quote-widget" aria-live="polite">
-				<svg class="quote-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-					<path
-						d="M9.5 7C6 7 4 9.5 4 13c0 2.8 2 4.5 4.3 4.5.4 2-1.1 3.3-3.3 3.3v2c4 0 6.5-2.5 6.5-6.3V13c0-3.5-2-6-2-6ZM20 7c-3.5 0-5.5 2.5-5.5 6c0 2.8 2 4.5 4.3 4.5.4 2-1.1 3.3-3.3 3.3v2c4 0 6.5-2.5 6.5-6.3V13c0-3.5-2-6-2-6Z"
-						fill="currentColor"
-					/>
-				</svg>
-				<p class="quote-text" id="quote-text">Great software begins with a simple idea.</p>
-				<span class="quote-hint">A new thought every 30 seconds</span>
+				<div class="max-w-3xl mx-auto mb-12 reveal">
+					<p class="font-body-lg text-body-lg text-on-surface-variant mb-6">
+						I believe software turns imagination into reality. Every project begins with an idea and becomes a solution
+						that serves people. I love the process — the problem-solving, the late-night debugging, the small win when
+						something finally clicks into place.
+					</p>
+					<p class="font-body-lg text-body-lg text-on-surface-variant">
+						I try to build with discipline, curiosity, and purpose, and to keep learning one project at a time. My faith
+						shapes how I work: it calls me to integrity, humility, excellence, and genuine service to the people who use
+						what I build.
+					</p>
+				</div>
+
+				<div class="max-w-xl mx-auto glass-card rounded-2xl p-10 reveal" id="quote-widget" aria-live="polite">
+					<span class="material-symbols-outlined text-primary text-4xl mb-4 inline-block" style="font-variation-settings: 'FILL' 1">format_quote</span>
+					<p class="quote-text font-headline-md text-xl sm:text-2xl font-bold text-on-surface mb-4" id="quote-text">Great software begins with a simple idea.</p>
+					<span class="font-label-caps text-label-caps text-on-surface-variant">A new thought every 30 seconds</span>
+				</div>
 			</div>
 		</section>
 
 		<!-- Skills Section -->
-		<section class="skills" id="skills">
-			<h1 class="section-title reveal">Skills & <span>Services</span></h1>
-			<div class="skill">
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/code.svg" alt="" aria-hidden="true" />
-					</div>
-					<h3>Languages</h3>
-					<div class="tag-list">
-						<span>JavaScript</span>
-						<span>TypeScript</span>
-						<span>HTML5</span>
-						<span>CSS3</span>
-					</div>
+		<section class="py-section-gap" id="skills">
+			<div class="max-w-container-max mx-auto px-gutter">
+				<div class="text-center mb-16 reveal">
+					<h2 class="font-headline-lg text-3xl sm:text-headline-lg mb-4 font-bold">Technical <span class="text-primary">Ecosystem</span></h2>
+					<p class="text-on-surface-variant">A curated list of technologies I use to build reliable, modern software.</p>
 				</div>
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/palette.svg" alt="" aria-hidden="true" />
+
+				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 reveal">
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">javascript</span>
+						<span class="font-code-sm text-code-sm">JavaScript</span>
 					</div>
-					<h3>Frontend</h3>
-					<div class="tag-list">
-						<span>React.js</span>
-						<span>Responsive Design</span>
-						<span>Modern UI Development</span>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">code</span>
+						<span class="font-code-sm text-code-sm">TypeScript</span>
 					</div>
-				</div>
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/server.svg" alt="" aria-hidden="true" />
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">html</span>
+						<span class="font-code-sm text-code-sm">HTML5</span>
 					</div>
-					<h3>Backend</h3>
-					<div class="tag-list">
-						<span>Node.js</span>
-						<span>Express.js</span>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">css</span>
+						<span class="font-code-sm text-code-sm">CSS3</span>
 					</div>
-				</div>
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/database.svg" alt="" aria-hidden="true" />
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">deployed_code</span>
+						<span class="font-code-sm text-code-sm">React.js</span>
 					</div>
-					<h3>Databases</h3>
-					<div class="tag-list">
-						<span>PostgreSQL</span>
-						<span>MongoDB</span>
-						<span>NeonDB</span>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">devices</span>
+						<span class="font-code-sm text-code-sm">Responsive Design</span>
 					</div>
-				</div>
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/cloud-upload.svg" alt="" aria-hidden="true" />
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">design_services</span>
+						<span class="font-code-sm text-code-sm">Modern UI Dev</span>
 					</div>
-					<h3>Cloud & Deployment</h3>
-					<div class="tag-list">
-						<span>Vercel</span>
-						<span>Netlify</span>
-						<span>Railway</span>
-						<span>Render</span>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">hub</span>
+						<span class="font-code-sm text-code-sm">Node.js</span>
 					</div>
-				</div>
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">api</span>
+						<span class="font-code-sm text-code-sm">Express.js</span>
 					</div>
-					<h3>Version Control</h3>
-					<div class="tag-list">
-						<span>Git</span>
-						<span>GitHub</span>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">database</span>
+						<span class="font-code-sm text-code-sm">PostgreSQL</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">storage</span>
+						<span class="font-code-sm text-code-sm">MongoDB</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">bolt</span>
+						<span class="font-code-sm text-code-sm">NeonDB</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">cloud</span>
+						<span class="font-code-sm text-code-sm">Vercel</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">cloud_done</span>
+						<span class="font-code-sm text-code-sm">Netlify</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">rocket_launch</span>
+						<span class="font-code-sm text-code-sm">Railway</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">dns</span>
+						<span class="font-code-sm text-code-sm">Render</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<span class="material-symbols-outlined text-3xl text-primary">commit</span>
+						<span class="font-code-sm text-code-sm">Git</span>
+					</div>
+					<div class="glass-card p-6 rounded-xl text-center flex flex-col items-center gap-3">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-primary" aria-hidden="true">
+							<path
+								d="M12 .297c-6.63 0-12 5.373-12 12c0 5.303 3.438 9.8 8.205 11.385c.6.113.82-.258.82-.577c0-.285-.01-1.04-.015-2.04c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729c1.205.084 1.838 1.236 1.838 1.236c1.07 1.835 2.809 1.305 3.495.998c.108-.776.417-1.305.76-1.605c-2.665-.3-5.466-1.332-5.466-5.93c0-1.31.465-2.38 1.235-3.22c-.135-.303-.54-1.523.105-3.176c0 0 1.005-.322 3.3 1.23c.96-.267 1.98-.399 3-.405c1.02.006 2.04.138 3 .405c2.28-1.552 3.285-1.23 3.285-1.23c.645 1.653.24 2.873.12 3.176c.765.84 1.23 1.91 1.23 3.22c0 4.61-2.805 5.625-5.475 5.92c.42.36.81 1.096.81 2.22c0 1.606-.015 2.896-.015 3.286c0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+							/>
+						</svg>
+						<span class="font-code-sm text-code-sm">GitHub</span>
 					</div>
 				</div>
 			</div>
+		</section>
 
-			<div class="expertise reveal">
-				<h3 class="expertise-title">Core Expertise</h3>
-				<div class="expertise-chips">
-					<span>Full-Stack Web Development</span>
-					<span>Mobile Application Development</span>
-					<span>Software Development</span>
-					<span>REST API Development</span>
-					<span>Authentication & Authorization</span>
-					<span>Database Design</span>
-					<span>Cloud Deployment</span>
-					<span>Performance Optimization</span>
+		<!-- Core Services Section -->
+		<section class="py-section-gap bg-surface-container-lowest/50">
+			<div class="max-w-container-max mx-auto px-gutter">
+				<div class="text-center mb-16 reveal">
+					<h2 class="font-headline-lg text-3xl sm:text-headline-lg mb-4 font-bold">Core <span class="text-primary">Expertise</span></h2>
+					<p class="text-on-surface-variant">Specialized areas where I deliver the most value.</p>
+				</div>
+				<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 reveal">
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-primary">devices</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">Full-Stack Web Development</h3>
+						<p class="text-on-surface-variant text-sm">End-to-end development of dynamic, scalable web applications.</p>
+					</div>
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-secondary">smartphone</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">Mobile Application Development</h3>
+						<p class="text-on-surface-variant text-sm">Building responsive mobile experiences with React Native.</p>
+					</div>
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-primary">terminal</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">Software Development</h3>
+						<p class="text-on-surface-variant text-sm">Writing clean, maintainable, well-tested software.</p>
+					</div>
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-secondary">settings_ethernet</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">REST API Development</h3>
+						<p class="text-on-surface-variant text-sm">Designing secure, documented, and efficient backend APIs.</p>
+					</div>
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-primary">lock</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">Authentication &amp; Authorization</h3>
+						<p class="text-on-surface-variant text-sm">Implementing secure login flows, sessions, and access control.</p>
+					</div>
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-secondary">schema</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">Database Design</h3>
+						<p class="text-on-surface-variant text-sm">Structuring relational and NoSQL data for scale and clarity.</p>
+					</div>
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-primary">cloud_upload</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">Cloud Deployment</h3>
+						<p class="text-on-surface-variant text-sm">Shipping and hosting applications on modern cloud platforms.</p>
+					</div>
+					<div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-all">
+						<div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-6">
+							<span class="material-symbols-outlined text-secondary">speed</span>
+						</div>
+						<h3 class="text-xl font-bold mb-3">Performance Optimization</h3>
+						<p class="text-on-surface-variant text-sm">Profiling and tuning applications for speed and efficiency.</p>
+					</div>
 				</div>
 			</div>
+		</section>
 
-			<!-- Projects Section -->
-			<div class="projects" id="projects">
-				<div class="project-controls">
-					<div class="filters" role="tablist" aria-label="Filter projects">
-						<button class="filter-btn active" data-filter="all">All</button>
-						<button class="filter-btn" data-filter="angular">Angular</button>
-						<button class="filter-btn" data-filter="nest">NestJS</button>
-						<button class="filter-btn" data-filter="php">PHP</button>
+		<!-- Projects Section -->
+		<section class="py-section-gap bg-surface-container-low" id="projects">
+			<div class="max-w-container-max mx-auto px-gutter">
+				<div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 reveal">
+					<div>
+						<h2 class="font-headline-lg text-3xl sm:text-headline-lg mb-4 font-bold">Selected <span class="text-primary">Work</span></h2>
+						<p class="text-on-surface-variant">A showcase of technical mastery and design precision.</p>
 					</div>
+					<a class="text-primary flex items-center gap-2 font-bold hover:gap-4 transition-all" href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer">
+						All Projects <span class="material-symbols-outlined">arrow_forward</span>
+					</a>
 				</div>
 
-				<div class="sample" id="project-list">
-					<div class="project-card reveal" data-tags="angular nest" tabindex="0">
-						<img src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1200&q=80" alt="IM Investment e-commerce website preview" loading="lazy" />
-						<div>
-							<h3>IM Investment E-commerce</h3>
-							<p>E-commerce platform with a modern storefront and intuitive user experience for product browsing and purchases.</p>
-							<div class="stack">
-								<button>Angular</button>
-								<button>NestJS</button>
-								<button>PostgreSQL</button>
-							</div>
-							<div class="project-actions">
-								<button type="button" class="open-modal" aria-label="Open project details">Preview</button>
-								<button type="button" class="icon-btn" data-href="https://github.com/MarkOtwane" aria-label="View source on GitHub">
-									<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+				<div class="flex flex-wrap gap-3 mb-10 reveal" role="group" aria-label="Filter projects">
+					<button type="button" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium border border-outline-variant text-on-surface-variant transition-all" data-filter="all">All</button>
+					<button type="button" class="filter-btn px-4 py-2 rounded-full text-sm font-medium border border-outline-variant text-on-surface-variant transition-all" data-filter="angular">Angular</button>
+					<button type="button" class="filter-btn px-4 py-2 rounded-full text-sm font-medium border border-outline-variant text-on-surface-variant transition-all" data-filter="nest">NestJS</button>
+					<button type="button" class="filter-btn px-4 py-2 rounded-full text-sm font-medium border border-outline-variant text-on-surface-variant transition-all" data-filter="php">PHP</button>
+				</div>
+
+				<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-stack-lg reveal" id="project-list">
+					<!-- Project 1 -->
+					<div class="project-card glass-card rounded-2xl overflow-hidden flex flex-col" data-tags="angular nest">
+						<div class="project-thumb h-56 overflow-hidden relative">
+							<img
+								class="w-full h-full object-cover"
+								src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1200&q=80"
+								alt="IM Investment e-commerce website preview"
+								loading="lazy"
+							/>
+							<div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center gap-4">
+								<button type="button" class="open-modal p-3 bg-white text-black rounded-full hover:scale-110 transition-transform" aria-label="Preview IM Investment">
+									<span class="material-symbols-outlined block">visibility</span>
 								</button>
-								<button type="button" data-href="https://im-investments.vercel.app/" aria-label="View IM Investment live demo">View Live</button>
+								<a
+									href="https://im-investments.vercel.app/"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform"
+									aria-label="Open IM Investment live demo"
+								>
+									<span class="material-symbols-outlined block">open_in_new</span>
+								</a>
+							</div>
+						</div>
+						<div class="p-8 flex flex-col flex-1">
+							<div class="flex gap-2 mb-4 flex-wrap">
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-primary uppercase tracking-widest">Angular</span>
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-primary uppercase tracking-widest">NestJS</span>
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-primary uppercase tracking-widest">PostgreSQL</span>
+							</div>
+							<h3 class="text-xl font-bold mb-3">IM Investment E-commerce</h3>
+							<p class="text-on-surface-variant mb-6 text-sm flex-1">
+								E-commerce platform with a modern storefront and intuitive user experience for product browsing and purchases.
+							</p>
+							<div class="mt-auto flex justify-between items-center">
+								<a class="text-sm font-bold text-primary hover:underline" href="https://im-investments.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+								<a class="text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors" href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer">GitHub</a>
 							</div>
 						</div>
 					</div>
 
-					<div class="project-card reveal" data-tags="php javascript" tabindex="0">
-						<img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80" alt="Photography website preview" loading="lazy" />
-						<div>
-							<h3>Photography Website</h3>
-							<p>Creative photography studio website showcasing visual galleries, services, and elegant content presentation.</p>
-							<div class="stack">
-								<button>Javascript</button>
-								<button>Docker</button>
-							</div>
-							<div class="project-actions">
-								<button type="button" class="open-modal" aria-label="Open project details">Preview</button>
-								<button type="button" class="icon-btn" data-href="https://github.com/MarkOtwane" aria-label="View source on GitHub">
-									<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+					<!-- Project 2 -->
+					<div class="project-card glass-card rounded-2xl overflow-hidden flex flex-col" data-tags="php javascript">
+						<div class="project-thumb h-56 overflow-hidden relative">
+							<img
+								class="w-full h-full object-cover"
+								src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80"
+								alt="Photography website preview"
+								loading="lazy"
+							/>
+							<div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center gap-4">
+								<button type="button" class="open-modal p-3 bg-white text-black rounded-full hover:scale-110 transition-transform" aria-label="Preview Photography Website">
+									<span class="material-symbols-outlined block">visibility</span>
 								</button>
-								<button type="button" data-href="https://photograph-studio.vercel.app/" aria-label="View Photography live demo">View Live</button>
+								<a
+									href="https://photograph-studio.vercel.app/"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform"
+									aria-label="Open Photography live demo"
+								>
+									<span class="material-symbols-outlined block">open_in_new</span>
+								</a>
+							</div>
+						</div>
+						<div class="p-8 flex flex-col flex-1">
+							<div class="flex gap-2 mb-4 flex-wrap">
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-secondary uppercase tracking-widest">Javascript</span>
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-secondary uppercase tracking-widest">Docker</span>
+							</div>
+							<h3 class="text-xl font-bold mb-3">Photography Website</h3>
+							<p class="text-on-surface-variant mb-6 text-sm flex-1">
+								Creative photography studio website showcasing visual galleries, services, and elegant content presentation.
+							</p>
+							<div class="mt-auto flex justify-between items-center">
+								<a class="text-sm font-bold text-primary hover:underline" href="https://photograph-studio.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+								<a class="text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors" href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer">GitHub</a>
 							</div>
 						</div>
 					</div>
 
-					<div class="project-card reveal" data-tags="angular nest" tabindex="0">
-						<img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80" alt="JML E-learning platform preview" loading="lazy" />
-						<div>
-							<h3>JML E-learning Platform</h3>
-							<p>Interactive online learning platform with organized course flows and a user-friendly learning experience.</p>
-							<div class="stack">
-								<button>Angular</button>
-								<button>NestJS</button>
-								<button>PostgreSQL</button>
-							</div>
-							<div class="project-actions">
-								<button type="button" class="open-modal" aria-label="Open project details">Preview</button>
-								<button type="button" class="icon-btn" data-href="https://github.com/MarkOtwane" aria-label="View source on GitHub">
-									<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
+					<!-- Project 3 -->
+					<div class="project-card glass-card rounded-2xl overflow-hidden flex flex-col" data-tags="angular nest">
+						<div class="project-thumb h-56 overflow-hidden relative">
+							<img
+								class="w-full h-full object-cover"
+								src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
+								alt="JML E-learning platform preview"
+								loading="lazy"
+							/>
+							<div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center gap-4">
+								<button type="button" class="open-modal p-3 bg-white text-black rounded-full hover:scale-110 transition-transform" aria-label="Preview JML E-learning Platform">
+									<span class="material-symbols-outlined block">visibility</span>
 								</button>
-								<button type="button" data-href="https://jlm-e-learning-platform.vercel.app/" aria-label="View JML live demo">View Live</button>
+								<a
+									href="https://jlm-e-learning-platform.vercel.app/"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform"
+									aria-label="Open JML live demo"
+								>
+									<span class="material-symbols-outlined block">open_in_new</span>
+								</a>
+							</div>
+						</div>
+						<div class="p-8 flex flex-col flex-1">
+							<div class="flex gap-2 mb-4 flex-wrap">
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-primary uppercase tracking-widest">Angular</span>
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-primary uppercase tracking-widest">NestJS</span>
+								<span class="px-3 py-1 glass-card rounded-full text-[10px] font-mono text-primary uppercase tracking-widest">PostgreSQL</span>
+							</div>
+							<h3 class="text-xl font-bold mb-3">JML E-learning Platform</h3>
+							<p class="text-on-surface-variant mb-6 text-sm flex-1">
+								Interactive online learning platform with organized course flows and a user-friendly learning experience.
+							</p>
+							<div class="mt-auto flex justify-between items-center">
+								<a class="text-sm font-bold text-primary hover:underline" href="https://jlm-e-learning-platform.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+								<a class="text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors" href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer">GitHub</a>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<button type="button" class="btn" data-href="https://github.com/MarkOtwane" aria-label="View more projects">View More</button>
 			</div>
 		</section>
 
 		<!-- Testimonials Section -->
-		<section class="testimonials" id="testimonials">
-			<h1 class="section-title reveal">What <span>Clients</span> Say</h1>
-			<div class="testimonial-list">
-				<blockquote class="reveal">
-					<p>"Mark delivered an outstanding e-commerce solution on time — highly professional and communicative."</p>
-					<footer>- Client, IM Investment</footer>
-				</blockquote>
-				<blockquote class="reveal">
-					<p>"Excellent attention to detail and thoughtful UI choices. Increased conversions after launch."</p>
-					<footer>- Photography Studio</footer>
-				</blockquote>
-			</div>
-		</section>
-
-		<!-- Contact Section (with simple form integration) -->
-		<section class="contact" id="contact">
-			<h1 class="reveal">Let's Work Together</h1>
-			<p class="reveal">Have a project in mind? Fill out the form or use the contact cards below.</p>
-
-			<form class="contact-form reveal" id="contact-form" method="POST" action="https://formspree.io/f/xkoayrjd">
-				<label for="name">Name</label>
-				<input type="text" id="name" name="name" required />
-
-				<label for="email">Email</label>
-				<input type="email" id="email" name="email" required />
-
-				<label for="message">Message</label>
-				<textarea id="message" name="message" rows="6" required></textarea>
-
-				<button type="submit" class="btn">Send Message</button>
-			</form>
-			<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-
-			<div class="socials">
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/mail.svg" alt="Email icon" aria-hidden="true" />
-					</div>
-					<a href="mailto:otwanemark003@gmail.com">
-						<span>Email</span>
-						<p>otwanemark003@gmail.com</p>
-					</a>
+		<section class="py-section-gap" id="testimonials">
+			<div class="max-w-container-max mx-auto px-gutter">
+				<div class="text-center mb-16 reveal">
+					<h2 class="font-headline-lg text-3xl sm:text-headline-lg mb-4 font-bold">What <span class="text-primary">Clients</span> Say</h2>
 				</div>
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/linkedin.svg" alt="LinkedIn icon" aria-hidden="true" />
-					</div>
-					<a href="https://www.linkedin.com/in/mark-otwane-800871349/">
-						<span>LinkedIn</span>
-						<p>@otwanemark</p>
-					</a>
-				</div>
-				<div class="reveal">
-					<div class="icon">
-						<img src="./public/icons/github.svg" alt="GitHub icon" aria-hidden="true" />
-					</div>
-					<a href="https://github.com/MarkOtwane">
-						<span>GitHub</span>
-						<p>@MarkOtwane</p>
-					</a>
+				<div class="grid sm:grid-cols-2 gap-6 reveal">
+					<blockquote class="glass-card p-8 rounded-2xl">
+						<span class="material-symbols-outlined text-primary text-4xl mb-3 block" style="font-variation-settings: 'FILL' 1">format_quote</span>
+						<p class="text-on-surface-variant italic mb-4">"Mark delivered an outstanding e-commerce solution on time — highly professional and communicative."</p>
+						<footer class="font-semibold text-on-surface not-italic">— Client, IM Investment</footer>
+					</blockquote>
+					<blockquote class="glass-card p-8 rounded-2xl">
+						<span class="material-symbols-outlined text-primary text-4xl mb-3 block" style="font-variation-settings: 'FILL' 1">format_quote</span>
+						<p class="text-on-surface-variant italic mb-4">"Excellent attention to detail and thoughtful UI choices. Increased conversions after launch."</p>
+						<footer class="font-semibold text-on-surface not-italic">— Photography Studio</footer>
+					</blockquote>
 				</div>
 			</div>
 		</section>
 
-		<!-- Back to top -->
-		<button id="back-to-top" aria-label="Back to top">
-			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-				<path d="M12 19V5M5 12l7-7 7 7" />
-			</svg>
-		</button>
+		<!-- Contact Section -->
+		<section class="py-section-gap bg-surface-container-highest/20" id="contact">
+			<div class="max-w-container-max mx-auto px-gutter">
+				<div class="grid lg:grid-cols-2 gap-stack-lg items-start">
+					<div class="reveal">
+						<h2 class="font-headline-lg text-3xl sm:text-headline-lg mb-6 font-bold">Let's Build Something <span class="text-primary">Exceptional</span></h2>
+						<p class="text-on-surface-variant mb-8">Have a project in mind? Fill out the form or reach out directly below.</p>
+						<div class="space-y-6">
+							<a class="flex items-center gap-4 group" href="mailto:otwanemark003@gmail.com">
+								<div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-primary shrink-0">
+									<span class="material-symbols-outlined">mail</span>
+								</div>
+								<div>
+									<div class="text-xs text-on-surface-variant uppercase tracking-widest font-label-caps">Email</div>
+									<div class="font-bold group-hover:text-primary transition-colors">otwanemark003@gmail.com</div>
+								</div>
+							</a>
+							<a class="flex items-center gap-4 group" href="https://www.linkedin.com/in/mark-otwane-800871349/" target="_blank" rel="noopener noreferrer">
+								<div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-primary shrink-0">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+										<path
+											d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037c-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85c3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.06 2.06 0 0 1-2.063-2.065a2.064 2.064 0 1 1 2.063 2.065m1.782 13.019H3.555V9h3.564zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"
+										/>
+									</svg>
+								</div>
+								<div>
+									<div class="text-xs text-on-surface-variant uppercase tracking-widest font-label-caps">LinkedIn</div>
+									<div class="font-bold group-hover:text-primary transition-colors">@otwanemark</div>
+								</div>
+							</a>
+							<a class="flex items-center gap-4 group" href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer">
+								<div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-primary shrink-0">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+										<path
+											d="M12 .297c-6.63 0-12 5.373-12 12c0 5.303 3.438 9.8 8.205 11.385c.6.113.82-.258.82-.577c0-.285-.01-1.04-.015-2.04c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729c1.205.084 1.838 1.236 1.838 1.236c1.07 1.835 2.809 1.305 3.495.998c.108-.776.417-1.305.76-1.605c-2.665-.3-5.466-1.332-5.466-5.93c0-1.31.465-2.38 1.235-3.22c-.135-.303-.54-1.523.105-3.176c0 0 1.005-.322 3.3 1.23c.96-.267 1.98-.399 3-.405c1.02.006 2.04.138 3 .405c2.28-1.552 3.285-1.23 3.285-1.23c.645 1.653.24 2.873.12 3.176c.765.84 1.23 1.91 1.23 3.22c0 4.61-2.805 5.625-5.475 5.92c.42.36.81 1.096.81 2.22c0 1.606-.015 2.896-.015 3.286c0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+										/>
+									</svg>
+								</div>
+								<div>
+									<div class="text-xs text-on-surface-variant uppercase tracking-widest font-label-caps">GitHub</div>
+									<div class="font-bold group-hover:text-primary transition-colors">@MarkOtwane</div>
+								</div>
+							</a>
+						</div>
+					</div>
+
+					<div class="glass-card p-8 rounded-2xl reveal" style="transition-delay: 200ms">
+						<form class="space-y-6" id="contact-form" method="POST" action="https://formspree.io/f/xkoayrjd">
+							<div class="grid md:grid-cols-2 gap-6">
+								<div class="space-y-2">
+									<label class="text-sm font-bold ml-1" for="name">Name</label>
+									<input
+										class="w-full bg-surface-container border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary text-on-surface p-3 outline-none transition-all"
+										id="name"
+										name="name"
+										placeholder="Your name"
+										required
+										type="text"
+									/>
+								</div>
+								<div class="space-y-2">
+									<label class="text-sm font-bold ml-1" for="email">Email</label>
+									<input
+										class="w-full bg-surface-container border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary text-on-surface p-3 outline-none transition-all"
+										id="email"
+										name="email"
+										placeholder="you@example.com"
+										required
+										type="email"
+									/>
+								</div>
+							</div>
+							<div class="space-y-2">
+								<label class="text-sm font-bold ml-1" for="message">Message</label>
+								<textarea
+									class="w-full bg-surface-container border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary text-on-surface p-3 outline-none transition-all"
+									id="message"
+									name="message"
+									placeholder="Tell me about your project..."
+									required
+									rows="4"
+								></textarea>
+							</div>
+							<button
+								class="w-full py-4 bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 transition-all flex items-center justify-center gap-2 relative overflow-hidden"
+								type="submit"
+								data-ripple
+							>
+								<span id="submit-label">Send Message</span>
+								<span class="material-symbols-outlined">send</span>
+							</button>
+							<p class="text-sm text-center" id="form-status" role="status" aria-live="polite"></p>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
 
 		<!-- Project Modal / Lightbox -->
-		<div id="project-modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
-			<div class="modal-content">
-				<button class="modal-close" aria-label="Close">
-				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
-					<path d="M4 4l16 16M20 4L4 20" />
-				</svg>
-			</button>
-				<h2 id="modal-title">Project Preview</h2>
-				<div class="modal-body"></div>
+		<div id="project-modal" class="modal fixed inset-0 items-center justify-center bg-black/60 backdrop-blur-sm z-[100] p-6" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+			<div class="modal-content glass-card bg-surface-container p-6 rounded-2xl max-w-2xl w-full relative">
+				<button type="button" class="modal-close absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-error hover:text-on-error transition-colors" aria-label="Close">
+					<span class="material-symbols-outlined text-lg">close</span>
+				</button>
+				<h2 id="modal-title" class="text-2xl font-bold mb-4">Project Preview</h2>
+				<div class="modal-body space-y-4"></div>
 			</div>
 		</div>
 
 		<!-- Footer -->
-		<footer>
-			<div class="footer-inner">
-				<div class="footer-brand">
-					<a class="brand" href="#home">Mark Otwane</a>
-					<p>Building impactful digital solutions with discipline, curiosity, and purpose.</p>
+		<footer class="bg-surface-container-lowest border-t border-on-surface/5 py-stack-lg">
+			<div class="max-w-container-max mx-auto px-gutter">
+				<div class="flex flex-col md:flex-row justify-between gap-stack-lg mb-8">
+					<div>
+						<a class="flex items-center gap-2 mb-3" href="#home">
+							<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1">terminal</span>
+							<span class="font-headline-md text-xl font-bold text-on-surface">Mark Otwane</span>
+						</a>
+						<p class="text-on-surface-variant text-sm max-w-xs">Building impactful digital solutions with discipline, curiosity, and purpose.</p>
+					</div>
+
+					<nav class="flex flex-col gap-3" aria-label="Footer navigation">
+						<a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#home">Home</a>
+						<a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#about">About</a>
+						<a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#philosophy">Philosophy</a>
+						<a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#skills">Skills</a>
+						<a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#contact">Contact</a>
+					</nav>
+
+					<div class="flex items-start gap-3">
+						<a class="w-10 h-10 rounded-lg glass-card flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path
+									d="M12 .297c-6.63 0-12 5.373-12 12c0 5.303 3.438 9.8 8.205 11.385c.6.113.82-.258.82-.577c0-.285-.01-1.04-.015-2.04c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729c1.205.084 1.838 1.236 1.838 1.236c1.07 1.835 2.809 1.305 3.495.998c.108-.776.417-1.305.76-1.605c-2.665-.3-5.466-1.332-5.466-5.93c0-1.31.465-2.38 1.235-3.22c-.135-.303-.54-1.523.105-3.176c0 0 1.005-.322 3.3 1.23c.96-.267 1.98-.399 3-.405c1.02.006 2.04.138 3 .405c2.28-1.552 3.285-1.23 3.285-1.23c.645 1.653.24 2.873.12 3.176c.765.84 1.23 1.91 1.23 3.22c0 4.61-2.805 5.625-5.475 5.92c.42.36.81 1.096.81 2.22c0 1.606-.015 2.896-.015 3.286c0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+								/>
+							</svg>
+						</a>
+						<a class="w-10 h-10 rounded-lg glass-card flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="https://www.instagram.com/otwanemark" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path
+									d="M7.03.084c-1.277.06-2.149.264-2.91.563a5.9 5.9 0 0 0-2.124 1.388a5.9 5.9 0 0 0-1.38 2.127C.321 4.926.12 5.8.064 7.076s-.069 1.688-.063 4.947s.021 3.667.083 4.947c.061 1.277.264 2.149.563 2.911c.308.789.72 1.457 1.388 2.123a5.9 5.9 0 0 0 2.129 1.38c.763.295 1.636.496 2.913.552c1.278.056 1.689.069 4.947.063s3.668-.021 4.947-.082c1.28-.06 2.147-.265 2.91-.563a5.9 5.9 0 0 0 2.123-1.388a5.9 5.9 0 0 0 1.38-2.129c.295-.763.496-1.636.551-2.912c.056-1.28.07-1.69.063-4.948c-.006-3.258-.02-3.667-.081-4.947c-.06-1.28-.264-2.148-.564-2.911a5.9 5.9 0 0 0-1.387-2.123a5.9 5.9 0 0 0-2.128-1.38c-.764-.294-1.636-.496-2.914-.55C15.647.009 15.236-.006 11.977 0S8.31.021 7.03.084m.14 21.693c-1.17-.05-1.805-.245-2.228-.408a3.7 3.7 0 0 1-1.382-.895a3.7 3.7 0 0 1-.9-1.378c-.165-.423-.363-1.058-.417-2.228c-.06-1.264-.072-1.644-.08-4.848c-.006-3.204.006-3.583.061-4.848c.05-1.169.246-1.805.408-2.228c.216-.561.477-.96.895-1.382a3.7 3.7 0 0 1 1.379-.9c.423-.165 1.057-.361 2.227-.417c1.265-.06 1.644-.072 4.848-.08c3.203-.006 3.583.006 4.85.062c1.168.05 1.804.244 2.227.408c.56.216.96.475 1.382.895s.681.817.9 1.378c.165.422.362 1.056.417 2.227c.06 1.265.074 1.645.08 4.848c.005 3.203-.006 3.583-.061 4.848c-.051 1.17-.245 1.805-.408 2.23c-.216.56-.477.96-.896 1.38a3.7 3.7 0 0 1-1.378.9c-.422.165-1.058.362-2.226.418c-1.266.06-1.645.072-4.85.079s-3.582-.006-4.848-.06m9.783-16.192a1.44 1.44 0 1 0 1.437-1.442a1.44 1.44 0 0 0-1.437 1.442M5.839 12.012a6.161 6.161 0 1 0 12.323-.024a6.162 6.162 0 0 0-12.323.024M8 12.008A4 4 0 1 1 12.008 16A4 4 0 0 1 8 12.008"
+								/>
+							</svg>
+						</a>
+						<a class="w-10 h-10 rounded-lg glass-card flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="https://www.linkedin.com/in/mark-otwane-800871349" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path
+									d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037c-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85c3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.06 2.06 0 0 1-2.063-2.065a2.064 2.064 0 1 1 2.063 2.065m1.782 13.019H3.555V9h3.564zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"
+								/>
+							</svg>
+						</a>
+					</div>
 				</div>
 
-				<nav class="footer-links" aria-label="Footer navigation">
-					<a href="#home">Home</a>
-					<a href="#about">About</a>
-					<a href="#philosophy">Philosophy</a>
-					<a href="#skills">Skills</a>
-					<a href="#contact">Contact</a>
-				</nav>
-
-				<div class="footer-socials">
-					<a href="https://github.com/MarkOtwane" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-						<img src="./public/icons/github.svg" alt="" aria-hidden="true" />
-					</a>
-					<a href="https://www.instagram.com/otwanemark" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
-						<img src="./public/icons/instagram.svg" alt="" aria-hidden="true" />
-					</a>
-					<a href="https://www.linkedin.com/in/mark-otwane-800871349" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-						<img src="./public/icons/linkedin.svg" alt="" aria-hidden="true" />
-					</a>
-					<button type="button" class="footer-top" id="footer-back-to-top" aria-label="Back to top">
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-							<path d="M12 19V5M5 12l7-7 7 7" />
-						</svg>
-						Back to top
-					</button>
+				<div class="pt-8 border-t border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-3 text-sm text-on-surface-variant">
+					<p>&copy; 2026 Mark Otwane. All rights reserved.</p>
+					<p>
+						Designed &amp; Developed by
+						<a class="text-primary hover:underline font-semibold" href="https://microtech-solutions.onrender.com/" target="_blank" rel="noopener noreferrer">Microtech Solutions</a>
+					</p>
 				</div>
-			</div>
-
-			<div class="footer-bottom">
-				<p>&copy; 2026 Mark Otwane. All rights reserved.</p>
-				<p>
-					Designed &amp; Developed by
-					<a href="https://microtech-solutions.onrender.com/" target="_blank" rel="noopener noreferrer">Microtech Solutions</a>
-				</p>
 			</div>
 		</footer>
 
-		<!-- Theme toggle -->
+		<!-- Back to top -->
+		<button type="button" class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-on-primary rounded-full shadow-lg z-40 flex items-center justify-center" id="back-to-top" aria-label="Back to top">
+			<span class="material-symbols-outlined">arrow_upward</span>
+		</button>
+
 		<script>
+			// Theme toggle (persists via localStorage, applied to <html class="dark">)
 			(function () {
-				const toggle = document.getElementById("theme-toggle");
-				const body = document.body;
-
-				function setTheme(theme) {
-					body.classList.remove("light", "dark");
-					body.classList.add(theme);
-					localStorage.setItem("theme", theme);
+				function setTheme(dark) {
+					document.documentElement.classList.toggle("dark", dark);
+					localStorage.setItem("theme", dark ? "dark" : "light");
 				}
-
-				if (toggle) {
-					toggle.addEventListener("click", () => {
-						setTheme(body.classList.contains("dark") ? "light" : "dark");
-					});
-				}
-
-				const saved = localStorage.getItem("theme");
-				if (saved) {
-					setTheme(saved);
-				} else {
-					const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-					setTheme(prefersDark ? "dark" : "light");
-				}
+				document.querySelectorAll("#theme-toggle, #theme-toggle-mobile").forEach((btn) => {
+					btn.addEventListener("click", () => setTheme(!document.documentElement.classList.contains("dark")));
+				});
 			})();
-		</script>
 
-		<!-- Scroll progress + nav glass state + section dot nav + back-to-top -->
-		<script>
+			// Scroll progress, sticky nav, section-dot + nav-link active state, back-to-top visibility
 			(function () {
-				const progress = document.getElementById("scroll-progress");
-				const topNav = document.querySelector("nav[role='navigation']");
+				const progress = document.getElementById("progress-bar");
+				const nav = document.getElementById("top-nav");
 				const backToTop = document.getElementById("back-to-top");
 				const dots = document.querySelectorAll(".section-dots a");
-				const navLinks = document.querySelectorAll(".nav-list a");
-				const sections = document.querySelectorAll("section[id]");
+				const navLinks = document.querySelectorAll(".nav-link");
+				const sections = document.querySelectorAll("section[id], header[id]");
 
 				function onScroll() {
-					const scrollTop = window.scrollY;
-					const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-					const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-					if (progress) progress.style.width = pct + "%";
+					const winScroll = document.documentElement.scrollTop;
+					const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+					const scrolled = height > 0 ? winScroll / height : 0;
+					if (progress) progress.style.scale = `${scrolled} 1`;
 
-					if (topNav) topNav.classList.toggle("scrolled", scrollTop > 8);
-					if (backToTop) backToTop.classList.toggle("visible", scrollTop > 600);
+					if (nav) nav.classList.toggle("shadow-md", winScroll > 8);
+					if (backToTop) backToTop.classList.toggle("visible", winScroll > 500);
 				}
-
 				window.addEventListener("scroll", onScroll, { passive: true });
 				onScroll();
 
-				const footerBackToTop = document.getElementById("footer-back-to-top");
-				[backToTop, footerBackToTop].forEach((button) => {
-					if (!button) return;
-					button.addEventListener("click", () => {
-						window.scrollTo({ top: 0, behavior: "smooth" });
-					});
-				});
+				if (backToTop) backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
 				if (sections.length && "IntersectionObserver" in window) {
-					const sectionObserver = new IntersectionObserver(
+					const io = new IntersectionObserver(
 						(entries) => {
 							entries.forEach((entry) => {
 								if (!entry.isIntersecting) return;
 								const id = entry.target.getAttribute("id");
-
-								navLinks.forEach((link) => {
-									link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
-								});
-								dots.forEach((dot) => {
-									dot.classList.toggle("active", dot.getAttribute("data-target") === id);
-								});
+								navLinks.forEach((link) => link.classList.toggle("text-primary", link.getAttribute("href") === `#${id}`));
+								dots.forEach((dot) => dot.classList.toggle("active", dot.getAttribute("data-target") === id));
 							});
 						},
 						{ rootMargin: "-45% 0px -45% 0px" }
 					);
-					sections.forEach((section) => sectionObserver.observe(section));
+					sections.forEach((section) => io.observe(section));
 				}
 			})();
-		</script>
 
-		<!-- Reveal-on-scroll + animated stat counters -->
-		<script>
+			// Reveal-on-scroll + animated counters
 			(function () {
 				const revealEls = document.querySelectorAll(".reveal");
 				if (!revealEls.length) return;
 
 				if (!("IntersectionObserver" in window)) {
-					revealEls.forEach((el) => el.classList.add("in-view"));
+					revealEls.forEach((el) => el.classList.add("active"));
 					return;
 				}
 
-				const revealObserver = new IntersectionObserver(
+				const io = new IntersectionObserver(
 					(entries, observer) => {
 						entries.forEach((entry) => {
 							if (!entry.isIntersecting) return;
-							entry.target.classList.add("in-view");
+							entry.target.classList.add("active");
 							observer.unobserve(entry.target);
 						});
 					},
 					{ threshold: 0.15 }
 				);
-				revealEls.forEach((el) => revealObserver.observe(el));
+				revealEls.forEach((el) => io.observe(el));
 
 				const counters = document.querySelectorAll(".counter");
 				if (counters.length) {
-					const counterObserver = new IntersectionObserver(
+					const counterIo = new IntersectionObserver(
 						(entries, observer) => {
 							entries.forEach((entry) => {
 								if (!entry.isIntersecting) return;
@@ -592,12 +919,11 @@
 								const suffix = el.getAttribute("data-suffix") || "";
 								const duration = 1200;
 								const start = performance.now();
-
 								function tick(now) {
-									const progress = Math.min((now - start) / duration, 1);
-									const eased = 1 - Math.pow(1 - progress, 3);
+									const p = Math.min((now - start) / duration, 1);
+									const eased = 1 - Math.pow(1 - p, 3);
 									el.textContent = Math.round(eased * target) + suffix;
-									if (progress < 1) requestAnimationFrame(tick);
+									if (p < 1) requestAnimationFrame(tick);
 								}
 								requestAnimationFrame(tick);
 								observer.unobserve(el);
@@ -605,34 +931,30 @@
 						},
 						{ threshold: 0.6 }
 					);
-					counters.forEach((el) => counterObserver.observe(el));
+					counters.forEach((el) => counterIo.observe(el));
 				}
 			})();
-		</script>
 
-		<!-- Mobile nav toggle -->
-		<script>
+			// Mobile menu
 			(function () {
-				const navToggle = document.getElementById("nav-toggle");
-				const navList = document.getElementById("primary-navigation");
-				if (navToggle && navList) {
-					navToggle.addEventListener("click", () => {
-						const expanded = navToggle.getAttribute("aria-expanded") === "true";
-						navToggle.setAttribute("aria-expanded", String(!expanded));
-						navList.classList.toggle("open");
-					});
-					navList.querySelectorAll("a").forEach((link) => {
-						link.addEventListener("click", () => {
-							navToggle.setAttribute("aria-expanded", "false");
-							navList.classList.remove("open");
-						});
-					});
+				const openBtn = document.getElementById("mobile-menu-btn");
+				const closeBtn = document.getElementById("close-mobile-menu");
+				const menu = document.getElementById("mobile-nav");
+				if (!openBtn || !menu) return;
+				function open() {
+					menu.classList.add("open");
+					openBtn.setAttribute("aria-expanded", "true");
 				}
+				function close() {
+					menu.classList.remove("open");
+					openBtn.setAttribute("aria-expanded", "false");
+				}
+				openBtn.addEventListener("click", open);
+				if (closeBtn) closeBtn.addEventListener("click", close);
+				menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", close));
 			})();
-		</script>
 
-		<!-- Smooth-scroll anchor links -->
-		<script>
+			// Smooth-scroll anchor links
 			(function () {
 				document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 					anchor.addEventListener("click", function (e) {
@@ -646,46 +968,17 @@
 					});
 				});
 			})();
-		</script>
 
-		<!-- Scroll-target buttons (hero CTAs) -->
-		<script>
-			(function () {
-				document.querySelectorAll("button[data-scroll]").forEach((button) => {
-					button.addEventListener("click", () => {
-						const target = document.querySelector(button.getAttribute("data-scroll"));
-						if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
-					});
-				});
-			})();
-		</script>
-
-		<!-- Button links -->
-		<script>
-			(function () {
-				document.querySelectorAll("button[data-href]").forEach((button) => {
-					button.addEventListener("click", () => {
-						const href = button.getAttribute("data-href");
-						if (!href) return;
-						if (href.startsWith("mailto:")) {
-							window.location.href = href;
-							return;
-						}
-						window.open(href, "_blank", "noopener,noreferrer");
-					});
-				});
-			})();
-		</script>
-
-		<!-- Project filters -->
-		<script>
+			// Project filters
 			(function () {
 				const buttons = document.querySelectorAll(".filter-btn");
 				const cards = document.querySelectorAll(".project-card");
 				buttons.forEach((btn) => {
 					btn.addEventListener("click", () => {
-						buttons.forEach((b) => b.classList.remove("active"));
-						btn.classList.add("active");
+						buttons.forEach((b) => {
+							b.classList.remove("active", "bg-primary", "text-on-primary", "border-primary");
+						});
+						btn.classList.add("active", "bg-primary", "text-on-primary", "border-primary");
 						const filter = btn.getAttribute("data-filter");
 						cards.forEach((card) => {
 							if (filter === "all") return (card.style.display = "");
@@ -694,16 +987,17 @@
 						});
 					});
 				});
+				const activeBtn = document.querySelector(".filter-btn.active");
+				if (activeBtn) activeBtn.classList.add("bg-primary", "text-on-primary", "border-primary");
 			})();
-		</script>
 
-		<!-- Modal for project preview -->
-		<script>
+			// Project preview modal
 			(function () {
 				const modal = document.getElementById("project-modal");
 				const modalBody = modal && modal.querySelector(".modal-body");
 				const closeBtn = modal && modal.querySelector(".modal-close");
 				const openers = document.querySelectorAll(".open-modal");
+
 				function openModal(content) {
 					if (!modal) return;
 					modal.setAttribute("aria-hidden", "false");
@@ -711,14 +1005,12 @@
 					if (modalBody) modalBody.innerHTML = content;
 					document.body.style.overflow = "hidden";
 				}
-
 				function closeModal() {
 					if (!modal) return;
 					modal.setAttribute("aria-hidden", "true");
 					modal.classList.remove("open");
 					document.body.style.overflow = "";
 				}
-
 				openers.forEach((btn) => {
 					btn.addEventListener("click", (e) => {
 						const card = e.target.closest(".project-card");
@@ -726,10 +1018,11 @@
 						const title = card.querySelector("h3")?.textContent || "Preview";
 						const img = card.querySelector("img")?.src || "";
 						const desc = card.querySelector("p")?.textContent || "";
-						openModal(`<img src="${img}" alt="${title}"/><h3>${title}</h3><p>${desc}</p>`);
+						openModal(
+							`<img src="${img}" alt="${title}" class="w-full h-auto rounded-xl"/><h3 class="text-xl font-bold">${title}</h3><p class="text-on-surface-variant text-sm">${desc}</p>`
+						);
 					});
 				});
-
 				if (closeBtn) closeBtn.addEventListener("click", closeModal);
 				if (modal)
 					modal.addEventListener("click", (e) => {
@@ -739,42 +1032,59 @@
 					if (e.key === "Escape") closeModal();
 				});
 			})();
-		</script>
 
-		<!-- Contact form: friendly submit feedback -->
-		<script>
+			// Contact form: real AJAX submit to Formspree with animated success/error state
 			(function () {
 				const form = document.getElementById("contact-form");
 				const status = document.getElementById("form-status");
+				const label = document.getElementById("submit-label");
 				if (!form) return;
-				form.addEventListener("submit", () => {
+
+				form.addEventListener("submit", async (e) => {
+					e.preventDefault();
 					const btn = form.querySelector('button[type="submit"]');
-					if (btn) {
-						btn.disabled = true;
-						btn.textContent = "Sending...";
-					}
-					if (status) {
-						status.textContent = "Sending your message...";
-						status.className = "form-status";
-					}
-					setTimeout(() => {
-						if (btn) {
-							btn.disabled = false;
-							btn.textContent = "Send Message";
+					btn.disabled = true;
+					label.textContent = "Sending...";
+					if (status) status.textContent = "";
+
+					try {
+						const res = await fetch(form.action, {
+							method: "POST",
+							body: new FormData(form),
+							headers: { Accept: "application/json" },
+						});
+						if (res.ok) {
+							label.textContent = "Message Sent!";
+							btn.classList.add("bg-green-500");
+							if (status) {
+								status.textContent = "Thanks — I'll get back to you soon.";
+								status.className = "text-sm text-center text-green-500";
+							}
+							form.reset();
+						} else {
+							throw new Error("Request failed");
 						}
-					}, 3000);
+					} catch (err) {
+						label.textContent = "Send Message";
+						if (status) {
+							status.textContent = "Something went wrong. Please try again or email me directly.";
+							status.className = "text-sm text-center text-error";
+						}
+					} finally {
+						setTimeout(() => {
+							btn.disabled = false;
+							btn.classList.remove("bg-green-500");
+							label.textContent = "Send Message";
+						}, 3000);
+					}
 				});
 			})();
-		</script>
 
-		<!-- Button ripple micro-interaction -->
-		<script>
+			// Button ripple micro-interaction
 			(function () {
-				const selector = ".btn-cta, .filter-btn, .project-actions button, .contact-form button.btn, .projects > button.btn";
 				document.addEventListener("click", (e) => {
-					const button = e.target.closest(selector);
+					const button = e.target.closest("[data-ripple]");
 					if (!button) return;
-
 					const rect = button.getBoundingClientRect();
 					const size = Math.max(rect.width, rect.height) * 1.6;
 					const ripple = document.createElement("span");
@@ -782,15 +1092,12 @@
 					ripple.style.width = ripple.style.height = size + "px";
 					ripple.style.left = e.clientX - rect.left - size / 2 + "px";
 					ripple.style.top = e.clientY - rect.top - size / 2 + "px";
-
 					button.appendChild(ripple);
 					ripple.addEventListener("animationend", () => ripple.remove());
 				});
 			})();
-		</script>
 
-		<!-- Dynamic inspirational quote generator -->
-		<script>
+			// Dynamic inspirational quote generator
 			(function () {
 				const quoteText = document.getElementById("quote-text");
 				if (!quoteText) return;
@@ -820,19 +1127,15 @@
 				function showNextQuote() {
 					let nextIndex = Math.floor(Math.random() * quotes.length);
 					if (quotes.length > 1) {
-						while (nextIndex === currentIndex) {
-							nextIndex = Math.floor(Math.random() * quotes.length);
-						}
+						while (nextIndex === currentIndex) nextIndex = Math.floor(Math.random() * quotes.length);
 					}
 					currentIndex = nextIndex;
-
 					quoteText.classList.add("fading");
 					setTimeout(() => {
 						quoteText.textContent = quotes[currentIndex];
 						quoteText.classList.remove("fading");
 					}, 400);
 				}
-
 				setInterval(showNextQuote, 30000);
 			})();
 		</script>
