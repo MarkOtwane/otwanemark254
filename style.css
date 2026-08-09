@@ -361,3 +361,15 @@ html.dark .icon-moon {
 	opacity: 1;
 	transform: rotate(0deg) scale(1);
 }
+
+/* ==========================================================================
+   Utility classes replacing inline styles
+   ========================================================================== */
+
+.material-symbols-filled {
+	font-variation-settings: 'FILL' 1;
+}
+
+.delay-200 {
+	transition-delay: 200ms;
+}
