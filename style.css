@@ -322,11 +322,15 @@ body {
    Hero portrait — full photo visible, no cropping
    ========================================================================== */
 
+.hero-photo-frame > div {
+	aspect-ratio: 3 / 4;
+	overflow: hidden;
+}
+
 .hero-photo-frame img {
 	width: 100%;
 	height: 100%;
-	aspect-ratio: 2 / 3;
-	object-fit: contain;
+	object-fit: cover;
 	display: block;
 }
 
