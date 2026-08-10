@@ -49,6 +49,37 @@
     .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
     .btn-full { width: 100%; justify-content: center; }
     
+    .btn-full { width: 100%; justify-content: center; }
+    .text-muted { color: var(--on-surface-variant); }
+    .text-italic { font-style: italic; }
+    .mt-1 { margin-top: 1rem; }
+    .mt-auto { margin-top: auto; }
+    
+    .list-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--outline);
+    }
+    .list-row.project-row {
+      align-items: flex-start;
+      padding: 1rem 0;
+    }
+    .list-row .item-main { flex: 1; }
+    .list-row .item-desc {
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    .list-row .item-tags {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .item-title { margin-top: 0.5rem; display: block; }
+    
     /* Layout */
     #admin-page { display: flex; min-height: 100vh; }
     .sidebar {
@@ -148,13 +179,13 @@
     <div class="nav-item" data-section="contact"><span class="material-symbols-outlined">mail</span> Contact</div>
     <div class="nav-item" data-section="social"><span class="material-symbols-outlined">share</span> Social Links</div>
     <div class="nav-item" data-section="settings"><span class="material-symbols-outlined">settings</span> Settings</div>
-    <button class="btn btn-secondary btn-sm" id="logout-btn" style="margin-top: auto; width: 100%;">Logout</button>
+    <button type="button" class="btn btn-secondary btn-sm btn-full" id="logout-btn">Logout</button>
   </aside>
 
   <main class="main-content">
     <div id="section-dashboard" class="section">
       <div class="header"><h1>Dashboard</h1></div>
-      <div class="card"><p style="color: var(--on-surface-variant);">Welcome to the portfolio admin dashboard. Select a section from the sidebar to manage your content.</p></div>
+      <div class="card"><p class="text-muted">Welcome to the portfolio admin dashboard. Select a section from the sidebar to manage your content.</p></div>
     </div>
 
     <div id="section-hero" class="section hidden">
@@ -172,7 +203,7 @@
       <div class="card">
         <h3>Quick Facts</h3>
         <div id="quick-facts-list"></div>
-        <button class="btn btn-secondary btn-sm" id="add-quick-fact-btn" style="margin-top: 1rem;">+ Add Quick Fact</button>
+        <button type="button" class="btn btn-secondary btn-sm mt-1" id="add-quick-fact-btn">+ Add Quick Fact</button>
       </div>
     </div>
 
@@ -180,7 +211,7 @@
       <div class="header"><h1>Skills</h1></div>
       <div class="card">
         <div id="skills-list"></div>
-        <button class="btn btn-secondary btn-sm" id="add-skill-btn" style="margin-top: 1rem;">+ Add Skill</button>
+        <button type="button" class="btn btn-secondary btn-sm mt-1" id="add-skill-btn">+ Add Skill</button>
       </div>
     </div>
 
@@ -188,7 +219,7 @@
       <div class="header"><h1>Projects</h1></div>
       <div class="card">
         <div id="projects-list"></div>
-        <button class="btn btn-secondary btn-sm" id="add-project-btn" style="margin-top: 1rem;">+ Add Project</button>
+        <button type="button" class="btn btn-secondary btn-sm mt-1" id="add-project-btn">+ Add Project</button>
       </div>
     </div>
 
@@ -196,7 +227,7 @@
       <div class="header"><h1>Testimonials</h1></div>
       <div class="card">
         <div id="testimonials-list"></div>
-        <button class="btn btn-secondary btn-sm" id="add-testimonial-btn" style="margin-top: 1rem;">+ Add Testimonial</button>
+        <button type="button" class="btn btn-secondary btn-sm mt-1" id="add-testimonial-btn">+ Add Testimonial</button>
       </div>
     </div>
 
@@ -211,7 +242,7 @@
       <div class="header"><h1>Social Links</h1></div>
       <div class="card">
         <div id="social-list"></div>
-        <button class="btn btn-secondary btn-sm" id="add-social-btn" style="margin-top: 1rem;">+ Add Social Link</button>
+        <button type="button" class="btn btn-secondary btn-sm mt-1" id="add-social-btn">+ Add Social Link</button>
       </div>
     </div>
 
@@ -240,12 +271,12 @@
   <div class="modal">
     <div class="modal-header">
       <h2 id="modal-title">Edit</h2>
-      <button class="close-btn" id="modal-close">&times;</button>
+      <button type="button" class="close-btn" id="modal-close">&times;</button>
     </div>
     <form id="modal-form"></form>
     <div class="modal-footer">
-      <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
-      <button class="btn btn-primary" id="modal-save">Save</button>
+      <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+      <button type="submit" class="btn btn-primary" id="modal-save">Save</button>
     </div>
   </div>
 </div>
@@ -392,11 +423,11 @@ async function loadAbout() {
   const facts = await apiCall('/about/quick-facts');
   const factsList = document.getElementById('quick-facts-list');
   factsList.innerHTML = facts.map(f => `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--outline);">
+    <div class="list-row">
       <div><strong>${f.label}</strong>: ${f.value}</div>
       <div class="actions">
-        <button class="btn btn-sm btn-secondary edit-quick-fact" data-id="${f.id}">Edit</button>
-        <button class="btn btn-sm btn-danger delete-quick-fact" data-id="${f.id}">Delete</button>
+        <button type="button" class="btn btn-sm btn-secondary edit-quick-fact" data-id="${f.id}">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger delete-quick-fact" data-id="${f.id}">Delete</button>
       </div>
     </div>
   `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">info</div><p>No quick facts yet</p></div>';
@@ -429,11 +460,11 @@ async function loadSkills() {
   const skills = await apiCall('/skills');
   const list = document.getElementById('skills-list');
   list.innerHTML = skills.map(s => `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--outline);">
+    <div class="list-row">
       <div><strong>${s.name}</strong> <span class="tag">${s.icon}</span></div>
       <div class="actions">
-        <button class="btn btn-sm btn-secondary edit-skill" data-id="${s.id}">Edit</button>
-        <button class="btn btn-sm btn-danger delete-skill" data-id="${s.id}">Delete</button>
+        <button type="button" class="btn btn-sm btn-secondary edit-skill" data-id="${s.id}">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger delete-skill" data-id="${s.id}">Delete</button>
       </div>
     </div>
   `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">widgets</div><p>No skills yet</p></div>';
@@ -466,17 +497,15 @@ async function loadProjects() {
   const projects = await apiCall('/projects');
   const list = document.getElementById('projects-list');
   list.innerHTML = projects.map(p => `
-    <div style="padding: 1rem 0; border-bottom: 1px solid var(--outline);">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div style="flex: 1;">
-          <strong>${p.title}</strong>
-          <p style="color: var(--on-surface-variant); font-size: 0.875rem; margin-top: 0.25rem;">${p.description?.substring(0, 100)}...</p>
-          <div style="margin-top: 0.5rem;">${(p.tags || []).map(t => `<span class="tag">${t.name}</span>`).join(' ')}</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-sm btn-secondary edit-project" data-id="${p.id}">Edit</button>
-          <button class="btn btn-sm btn-danger delete-project" data-id="${p.id}">Delete</button>
-        </div>
+    <div class="list-row project-row">
+      <div class="item-main">
+        <strong>${p.title}</strong>
+        <p class="item-desc">${p.description?.substring(0, 100)}...</p>
+        <div class="item-tags">${(p.tags || []).map(t => `<span class="tag">${t.name}</span>`).join(' ')}</div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-sm btn-secondary edit-project" data-id="${p.id}">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger delete-project" data-id="${p.id}">Delete</button>
       </div>
     </div>
   `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">folder</div><p>No projects yet</p></div>';
@@ -512,14 +541,14 @@ async function loadTestimonials() {
   const items = await apiCall('/testimonials');
   const list = document.getElementById('testimonials-list');
   list.innerHTML = items.map(t => `
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 1rem 0; border-bottom: 1px solid var(--outline);">
-      <div style="flex: 1;">
-        <p style="font-style: italic; color: var(--on-surface-variant);">"${t.quote}"</p>
-        <strong style="margin-top: 0.5rem; display: block;">${t.client_name} ${t.company ? `— ${t.company}` : ''}</strong>
+    <div class="list-row">
+      <div class="item-main">
+        <p class="text-muted text-italic">"${t.quote}"</p>
+        <strong class="item-title">${t.client_name} ${t.company ? `— ${t.company}` : ''}</strong>
       </div>
       <div class="actions">
-        <button class="btn btn-sm btn-secondary edit-testimonial" data-id="${t.id}">Edit</button>
-        <button class="btn btn-sm btn-danger delete-testimonial" data-id="${t.id}">Delete</button>
+        <button type="button" class="btn btn-sm btn-secondary edit-testimonial" data-id="${t.id}">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger delete-testimonial" data-id="${t.id}">Delete</button>
       </div>
     </div>
   `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">format_quote</div><p>No testimonials yet</p></div>';
@@ -572,11 +601,11 @@ async function loadSocial() {
   const items = await apiCall('/social');
   const list = document.getElementById('social-list');
   list.innerHTML = items.map(s => `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--outline);">
+    <div class="list-row">
       <div><strong>${s.platform}</strong>: ${s.url}</div>
       <div class="actions">
-        <button class="btn btn-sm btn-secondary edit-social" data-id="${s.id}">Edit</button>
-        <button class="btn btn-sm btn-danger delete-social" data-id="${s.id}">Delete</button>
+        <button type="button" class="btn btn-sm btn-secondary edit-social" data-id="${s.id}">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger delete-social" data-id="${s.id}">Delete</button>
       </div>
     </div>
   `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">share</div><p>No social links yet</p></div>';
