@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Mark Otwane Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --surface: #ffffff;
+      --on-surface: #0b0d12;
+      --on-surface-variant: #565b66;
+      --primary: #4f46e5;
+      --primary-container: #e0e0fd;
+      --outline: #d8d8e3;
+      --error: #dc2626;
+      font-family: 'Inter', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--on-surface); min-height: 100vh; }
+    
+    .hidden { display: none !important; }
+    
+    /* Login */
+    #login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
+    .login-card { background: var(--surface); padding: 3rem; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 400px; }
+    .login-card h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .login-card p { color: var(--on-surface-variant); margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--outline); border-radius: 0.75rem;
+      font-size: 1rem; background: var(--surface); color: var(--on-surface);
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem;
+      border: none; border-radius: 0.75rem; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-secondary { background: var(--primary-container); color: var(--primary); }
+    .btn-danger { background: #fef2f2; color: var(--error); }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
+    .btn-full { width: 100%; justify-content: center; }
+    
+    /* Layout */
+    #admin-page { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px; background: var(--surface); border-right: 1px solid var(--outline);
+      padding: 2rem 1.5rem; position: fixed; height: 100vh; overflow-y: auto;
+    }
+    .sidebar h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 2rem; }
+    .nav-item {
+      display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
+      border-radius: 0.75rem; cursor: pointer; margin-bottom: 0.5rem;
+      color: var(--on-surface-variant); font-weight: 500; transition: all 0.2s;
+    }
+    .nav-item:hover, .nav-item.active { background: var(--primary-container); color: var(--primary); }
+    .nav-item .material-symbols-outlined { font-size: 1.25rem; }
+    
+    .main-content { flex: 1; margin-left: 260px; padding: 2rem; max-width: calc(100vw - 260px); }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 1.75rem; font-weight: 700; }
+    
+    /* Cards */
+    .card { background: var(--surface); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--outline); }
+    .card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+    
+    /* Tables */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th, .data-table td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--outline); }
+    .data-table th { font-weight: 600; color: var(--on-surface-variant); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .data-table td { font-size: 0.95rem; }
+    .data-table tr:hover td { background: rgba(79,70,229,0.02); }
+    .actions { display: flex; gap: 0.5rem; }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex;
+      align-items: center; justify-content: center; z-index: 100; padding: 2rem;
+    }
+    .modal { background: var(--surface); border-radius: 1.5rem; padding: 2rem; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .modal-header h2 { font-size: 1.25rem; font-weight: 700; }
+    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--on-surface-variant); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
+    
+    /* Tags */
+    .tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background: var(--primary-container); color: var(--primary); }
+    
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 0.75rem;
+      color: white; font-weight: 500; z-index: 200; transform: translateY(100px); opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #16a34a; }
+    .toast.error { background: var(--error); }
+    
+    .empty-state { text-align: center; padding: 3rem; color: var(--on-surface-variant); }
+    .empty-state .material-symbols-outlined { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+    
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; max-width: 100vw; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Page -->
+<div id="login-page">
+  <div class="login-card">
+    <h1>Admin Login</h1>
+    <p>Sign in to manage your portfolio</p>
+    <form id="login-form">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" required placeholder="admin@portfolio.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+    </form>
+  </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div id="admin-page" class="hidden">
+  <aside class="sidebar">
+    <h2>Portfolio Admin</h2>
+    <div class="nav-item active" data-section="dashboard"><span class="material-symbols-outlined">dashboard</span> Dashboard</div>
+    <div class="nav-item" data-section="hero"><span class="material-symbols-outlined">person</span> Hero</div>
+    <div class="nav-item" data-section="about"><span class="material-symbols-outlined">info</span> About</div>
+    <div class="nav-item" data-section="skills"><span class="material-symbols-outlined">widgets</span> Skills</div>
+    <div class="nav-item" data-section="projects"><span class="material-symbols-outlined">folder</span> Projects</div>
+    <div class="nav-item" data-section="testimonials"><span class="material-symbols-outlined">format_quote</span> Testimonials</div>
+    <div class="nav-item" data-section="contact"><span class="material-symbols-outlined">mail</span> Contact</div>
+    <div class="nav-item" data-section="social"><span class="material-symbols-outlined">share</span> Social Links</div>
+    <div class="nav-item" data-section="settings"><span class="material-symbols-outlined">settings</span> Settings</div>
+    <button class="btn btn-secondary btn-sm" id="logout-btn" style="margin-top: auto; width: 100%;">Logout</button>
+  </aside>
+
+  <main class="main-content">
+    <div id="section-dashboard" class="section">
+      <div class="header"><h1>Dashboard</h1></div>
+      <div class="card"><p style="color: var(--on-surface-variant);">Welcome to the portfolio admin dashboard. Select a section from the sidebar to manage your content.</p></div>
+    </div>
+
+    <div id="section-hero" class="section hidden">
+      <div class="header"><h1>Hero Section</h1></div>
+      <div class="card">
+        <form id="hero-form"></form>
+      </div>
+    </div>
+
+    <div id="section-about" class="section hidden">
+      <div class="header"><h1>About Section</h1></div>
+      <div class="card">
+        <form id="about-form"></form>
+      </div>
+      <div class="card">
+        <h3>Quick Facts</h3>
+        <div id="quick-facts-list"></div>
+        <button class="btn btn-secondary btn-sm" id="add-quick-fact-btn" style="margin-top: 1rem;">+ Add Quick Fact</button>
+      </div>
+    </div>
+
+    <div id="section-skills" class="section hidden">
+      <div class="header"><h1>Skills</h1></div>
+      <div class="card">
+        <div id="skills-list"></div>
+        <button class="btn btn-secondary btn-sm" id="add-skill-btn" style="margin-top: 1rem;">+ Add Skill</button>
+      </div>
+    </div>
+
+    <div id="section-projects" class="section hidden">
+      <div class="header"><h1>Projects</h1></div>
+      <div class="card">
+        <div id="projects-list"></div>
+        <button class="btn btn-secondary btn-sm" id="add-project-btn" style="margin-top: 1rem;">+ Add Project</button>
+      </div>
+    </div>
+
+    <div id="section-testimonials" class="section hidden">
+      <div class="header"><h1>Testimonials</h1></div>
+      <div class="card">
+        <div id="testimonials-list"></div>
+        <button class="btn btn-secondary btn-sm" id="add-testimonial-btn" style="margin-top: 1rem;">+ Add Testimonial</button>
+      </div>
+    </div>
+
+    <div id="section-contact" class="section hidden">
+      <div class="header"><h1>Contact Information</h1></div>
+      <div class="card">
+        <form id="contact-form"></form>
+      </div>
+    </div>
+
+    <div id="section-social" class="section hidden">
+      <div class="header"><h1>Social Links</h1></div>
+      <div class="card">
+        <div id="social-list"></div>
+        <button class="btn btn-secondary btn-sm" id="add-social-btn" style="margin-top: 1rem;">+ Add Social Link</button>
+      </div>
+    </div>
+
+    <div id="section-settings" class="section hidden">
+      <div class="header"><h1>Settings</h1></div>
+      <div class="card">
+        <h3>Change Password</h3>
+        <form id="password-form">
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" id="current-password" required>
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="new-password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Change Password</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Generic Modal -->
+<div id="modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Edit</h2>
+      <button class="close-btn" id="modal-close">&times;</button>
+    </div>
+    <form id="modal-form"></form>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+      <button class="btn btn-primary" id="modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_BASE = 'http://localhost:5000/api';
+let token = localStorage.getItem('admin_token');
+let currentSection = null;
+let editingId = null;
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = `toast ${type} show`;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+async function apiCall(endpoint, options = {}) {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Request failed' }));
+    throw new Error(err.error || err.detail || 'Request failed');
+  }
+  return res.json();
+}
+
+async function apiCallForm(endpoint, formData) {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: formData._method === 'PUT' ? 'PUT' : formData._method === 'DELETE' ? 'DELETE' : 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(formData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Request failed' }));
+    throw new Error(err.error || err.detail || 'Request failed');
+  }
+  return res.json();
+}
+
+// Auth
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  try {
+    const data = await apiCall('/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+    token = data.token;
+    localStorage.setItem('admin_token', token);
+    document.getElementById('login-page').classList.add('hidden');
+    document.getElementById('admin-page').classList.remove('hidden');
+    loadSection('dashboard');
+    showToast('Welcome back!');
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+});
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+  localStorage.removeItem('admin_token');
+  token = null;
+  location.reload();
+});
+
+// Navigation
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => loadSection(item.dataset.section));
+});
+
+function loadSection(section) {
+  currentSection = section;
+  document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`section-${section}`).classList.remove('hidden');
+  document.querySelector(`.nav-item[data-section="${section}"]`)?.classList.add('active');
+  
+  if (section === 'hero') loadHero();
+  else if (section === 'about') loadAbout();
+  else if (section === 'skills') loadSkills();
+  else if (section === 'projects') loadProjects();
+  else if (section === 'testimonials') loadTestimonials();
+  else if (section === 'contact') loadContact();
+  else if (section === 'social') loadSocial();
+}
+
+// Hero
+async function loadHero() {
+  const data = await apiCall('/hero');
+  const form = document.getElementById('hero-form');
+  form.innerHTML = `
+    <div class="form-group"><label>Greeting</label><input name="greeting" value="${data.greeting || ''}"></div>
+    <div class="form-group"><label>Name</label><input name="name" value="${data.name || ''}"></div>
+    <div class="form-group"><label>Title</label><input name="title" value="${data.title || ''}"></div>
+    <div class="form-group"><label>Subtitle</label><input name="subtitle" value="${data.subtitle || ''}"></div>
+    <div class="form-group"><label>Description</label><textarea name="description" rows="3">${data.description || ''}</textarea></div>
+    <div class="form-group"><label>Tagline</label><input name="tagline" value="${data.tagline || ''}"></div>
+    <div class="form-group"><label><input type="checkbox" name="available" ${data.available ? 'checked' : ''}> Available for opportunities</label></div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  `;
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const body = Object.fromEntries(fd.entries());
+    body.available = form.querySelector('[name="available"]').checked;
+    try {
+      await apiCall('/hero', { method: 'POST', body: JSON.stringify(body) });
+      showToast('Hero section updated');
+    } catch (err) { showToast(err.message, 'error'); }
+  };
+}
+
+// About
+async function loadAbout() {
+  const data = await apiCall('/about');
+  const form = document.getElementById('about-form');
+  form.innerHTML = `
+    <div class="form-group"><label>Title</label><input name="title" value="${data.title || ''}"></div>
+    <div class="form-group"><label>Description</label><textarea name="description" rows="4">${data.description || ''}</textarea></div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  `;
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    try {
+      await apiCall('/about', { method: 'POST', body: JSON.stringify(Object.fromEntries(fd.entries())) });
+      showToast('About section updated');
+    } catch (err) { showToast(err.message, 'error'); }
+  };
+  
+  const facts = await apiCall('/about/quick-facts');
+  const factsList = document.getElementById('quick-facts-list');
+  factsList.innerHTML = facts.map(f => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--outline);">
+      <div><strong>${f.label}</strong>: ${f.value}</div>
+      <div class="actions">
+        <button class="btn btn-sm btn-secondary edit-quick-fact" data-id="${f.id}">Edit</button>
+        <button class="btn btn-sm btn-danger delete-quick-fact" data-id="${f.id}">Delete</button>
+      </div>
+    </div>
+  `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">info</div><p>No quick facts yet</p></div>';
+  
+  document.querySelectorAll('.delete-quick-fact').forEach(btn => {
+    btn.onclick = async () => {
+      try { await apiCall(`/about/quick-facts/${btn.dataset.id}`, { method: 'DELETE' }); loadAbout(); showToast('Deleted'); }
+      catch (err) { showToast(err.message, 'error'); }
+    };
+  });
+  
+  document.getElementById('add-quick-fact-btn').onclick = () => openModal('Add Quick Fact', { label: '', value: '', icon: 'star' }, async (data) => {
+    await apiCall('/about/quick-facts', { method: 'POST', body: JSON.stringify(data) });
+    loadAbout();
+  });
+  
+  document.querySelectorAll('.edit-quick-fact').forEach(btn => {
+    btn.onclick = async () => {
+      const fact = facts.find(f => f.id == btn.dataset.id);
+      openModal('Edit Quick Fact', fact, async (data) => {
+        await apiCall(`/about/quick-facts/${btn.dataset.id}`, { method: 'POST', body: JSON.stringify(data) });
+        loadAbout();
+      });
+    };
+  });
+}
+
+// Skills
+async function loadSkills() {
+  const skills = await apiCall('/skills');
+  const list = document.getElementById('skills-list');
+  list.innerHTML = skills.map(s => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--outline);">
+      <div><strong>${s.name}</strong> <span class="tag">${s.icon}</span></div>
+      <div class="actions">
+        <button class="btn btn-sm btn-secondary edit-skill" data-id="${s.id}">Edit</button>
+        <button class="btn btn-sm btn-danger delete-skill" data-id="${s.id}">Delete</button>
+      </div>
+    </div>
+  `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">widgets</div><p>No skills yet</p></div>';
+  
+  document.querySelectorAll('.delete-skill').forEach(btn => {
+    btn.onclick = async () => {
+      try { await apiCall(`/skills/${btn.dataset.id}`, { method: 'DELETE' }); loadSkills(); showToast('Deleted'); }
+      catch (err) { showToast(err.message, 'error'); }
+    };
+  });
+  
+  document.getElementById('add-skill-btn').onclick = () => openModal('Add Skill', { name: '', icon: 'star', sort_order: 0 }, async (data) => {
+    await apiCall('/skills', { method: 'POST', body: JSON.stringify(data) });
+    loadSkills();
+  });
+  
+  document.querySelectorAll('.edit-skill').forEach(btn => {
+    btn.onclick = async () => {
+      const skill = skills.find(s => s.id == btn.dataset.id);
+      openModal('Edit Skill', skill, async (data) => {
+        await apiCall(`/skills/${btn.dataset.id}`, { method: 'POST', body: JSON.stringify(data) });
+        loadSkills();
+      });
+    };
+  });
+}
+
+// Projects
+async function loadProjects() {
+  const projects = await apiCall('/projects');
+  const list = document.getElementById('projects-list');
+  list.innerHTML = projects.map(p => `
+    <div style="padding: 1rem 0; border-bottom: 1px solid var(--outline);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div style="flex: 1;">
+          <strong>${p.title}</strong>
+          <p style="color: var(--on-surface-variant); font-size: 0.875rem; margin-top: 0.25rem;">${p.description?.substring(0, 100)}...</p>
+          <div style="margin-top: 0.5rem;">${(p.tags || []).map(t => `<span class="tag">${t.name}</span>`).join(' ')}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm btn-secondary edit-project" data-id="${p.id}">Edit</button>
+          <button class="btn btn-sm btn-danger delete-project" data-id="${p.id}">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">folder</div><p>No projects yet</p></div>';
+  
+  document.querySelectorAll('.delete-project').forEach(btn => {
+    btn.onclick = async () => {
+      try { await apiCall(`/projects/${btn.dataset.id}`, { method: 'DELETE' }); loadProjects(); showToast('Deleted'); }
+      catch (err) { showToast(err.message, 'error'); }
+    };
+  });
+  
+  document.getElementById('add-project-btn').onclick = () => openModal('Add Project', { title: '', description: '', image_url: '', live_url: '', github_url: '', featured: true, tags: [] }, async (data) => {
+    data.tags = (data.tags || '').split(',').map(t => ({ name: t.trim(), color: '' })).filter(Boolean);
+    await apiCall('/projects', { method: 'POST', body: JSON.stringify(data) });
+    loadProjects();
+  }, { tags: 'Comma separated tags' });
+  
+  document.querySelectorAll('.edit-project').forEach(btn => {
+    btn.onclick = async () => {
+      const project = projects.find(p => p.id == btn.dataset.id);
+      const projectData = { ...project, tags: (project.tags || []).map(t => t.name).join(', ') };
+      openModal('Edit Project', projectData, async (data) => {
+        data.tags = (data.tags || '').split(',').map(t => ({ name: t.trim(), color: '' })).filter(Boolean);
+        await apiCall(`/projects/${btn.dataset.id}`, { method: 'POST', body: JSON.stringify(data) });
+        loadProjects();
+      }, { tags: 'Comma separated tags' });
+    };
+  });
+}
+
+// Testimonials
+async function loadTestimonials() {
+  const items = await apiCall('/testimonials');
+  const list = document.getElementById('testimonials-list');
+  list.innerHTML = items.map(t => `
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 1rem 0; border-bottom: 1px solid var(--outline);">
+      <div style="flex: 1;">
+        <p style="font-style: italic; color: var(--on-surface-variant);">"${t.quote}"</p>
+        <strong style="margin-top: 0.5rem; display: block;">${t.client_name} ${t.company ? `— ${t.company}` : ''}</strong>
+      </div>
+      <div class="actions">
+        <button class="btn btn-sm btn-secondary edit-testimonial" data-id="${t.id}">Edit</button>
+        <button class="btn btn-sm btn-danger delete-testimonial" data-id="${t.id}">Delete</button>
+      </div>
+    </div>
+  `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">format_quote</div><p>No testimonials yet</p></div>';
+  
+  document.querySelectorAll('.delete-testimonial').forEach(btn => {
+    btn.onclick = async () => {
+      try { await apiCall(`/testimonials/${btn.dataset.id}`, { method: 'DELETE' }); loadTestimonials(); showToast('Deleted'); }
+      catch (err) { showToast(err.message, 'error'); }
+    };
+  });
+  
+  document.getElementById('add-testimonial-btn').onclick = () => openModal('Add Testimonial', { quote: '', client_name: '', company: '', sort_order: 0 }, async (data) => {
+    await apiCall('/testimonials', { method: 'POST', body: JSON.stringify(data) });
+    loadTestimonials();
+  });
+  
+  document.querySelectorAll('.edit-testimonial').forEach(btn => {
+    btn.onclick = async () => {
+      const item = items.find(t => t.id == btn.dataset.id);
+      openModal('Edit Testimonial', item, async (data) => {
+        await apiCall(`/testimonials/${btn.dataset.id}`, { method: 'POST', body: JSON.stringify(data) });
+        loadTestimonials();
+      });
+    };
+  });
+}
+
+// Contact
+async function loadContact() {
+  const data = await apiCall('/contact');
+  const form = document.getElementById('contact-form');
+  form.innerHTML = `
+    <div class="form-group"><label>Email</label><input name="email" value="${data.email || ''}"></div>
+    <div class="form-group"><label>Phone</label><input name="phone" value="${data.phone || ''}"></div>
+    <div class="form-group"><label>Location</label><input name="location" value="${data.location || ''}"></div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  `;
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    try {
+      await apiCall('/contact', { method: 'POST', body: JSON.stringify(Object.fromEntries(fd.entries())) });
+      showToast('Contact info updated');
+    } catch (err) { showToast(err.message, 'error'); }
+  };
+}
+
+// Social
+async function loadSocial() {
+  const items = await apiCall('/social');
+  const list = document.getElementById('social-list');
+  list.innerHTML = items.map(s => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--outline);">
+      <div><strong>${s.platform}</strong>: ${s.url}</div>
+      <div class="actions">
+        <button class="btn btn-sm btn-secondary edit-social" data-id="${s.id}">Edit</button>
+        <button class="btn btn-sm btn-danger delete-social" data-id="${s.id}">Delete</button>
+      </div>
+    </div>
+  `).join('') || '<div class="empty-state"><div class="material-symbols-outlined">share</div><p>No social links yet</p></div>';
+  
+  document.querySelectorAll('.delete-social').forEach(btn => {
+    btn.onclick = async () => {
+      try { await apiCall(`/social/${btn.dataset.id}`, { method: 'DELETE' }); loadSocial(); showToast('Deleted'); }
+      catch (err) { showToast(err.message, 'error'); }
+    };
+  });
+  
+  document.getElementById('add-social-btn').onclick = () => openModal('Add Social Link', { platform: 'github', url: '', icon: '', sort_order: 0 }, async (data) => {
+    await apiCall('/social', { method: 'POST', body: JSON.stringify(data) });
+    loadSocial();
+  });
+  
+  document.querySelectorAll('.edit-social').forEach(btn => {
+    btn.onclick = async () => {
+      const item = items.find(s => s.id == btn.dataset.id);
+      openModal('Edit Social Link', item, async (data) => {
+        await apiCall(`/social/${btn.dataset.id}`, { method: 'POST', body: JSON.stringify(data) });
+        loadSocial();
+      });
+    };
+  });
+}
+
+// Modal
+function openModal(title, data, onSave, fields = {}) {
+  editingId = data.id || null;
+  document.getElementById('modal-title').textContent = title;
+  const form = document.getElementById('modal-form');
+  form.innerHTML = Object.entries(data).filter(([k]) => k !== 'id').map(([key, value]) => {
+    const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    if (key === 'available' || key === 'featured') {
+      return `<div class="form-group"><label><input type="checkbox" name="${key}" ${value ? 'checked' : ''}> ${label}</label></div>`;
+    }
+    if (fields[key]) {
+      return `<div class="form-group"><label>${label}</label><input name="${key}" value="${value || ''}"></div>`;
+    }
+    return `<div class="form-group"><label>${label}</label><input name="${key}" value="${value || ''}"></div>`;
+  }).join('');
+  
+  document.getElementById('modal').classList.remove('hidden');
+  
+  document.getElementById('modal-save').onclick = async () => {
+    const fd = new FormData(form);
+    const body = Object.fromEntries(fd.entries());
+    if (form.querySelector('[name="available"]')) body.available = form.querySelector('[name="available"]').checked;
+    if (form.querySelector('[name="featured"]')) body.featured = form.querySelector('[name="featured"]').checked;
+    try {
+      await onSave(body);
+      closeModal();
+      showToast('Saved successfully');
+    } catch (err) { showToast(err.message, 'error'); }
+  };
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+  editingId = null;
+}
+
+document.getElementById('modal-close').onclick = closeModal;
+document.getElementById('modal-cancel').onclick = closeModal;
+
+// Password change
+document.getElementById('password-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await apiCall('/admin/change-password', {
+      method: 'POST',
+      body: JSON.stringify({
+        currentPassword: document.getElementById('current-password').value,
+        newPassword: document.getElementById('new-password').value,
+      }),
+    });
+    showToast('Password changed');
+    e.target.reset();
+  } catch (err) { showToast(err.message, 'error'); }
+});
+
+// Check auth on load
+if (token) {
+  try {
+    await apiCall('/admin/login'); // token validation endpoint doesn't exist, let's just show dashboard
+    document.getElementById('login-page').classList.add('hidden');
+    document.getElementById('admin-page').classList.remove('hidden');
+    loadSection('dashboard');
+  } catch (e) {
+    localStorage.removeItem('admin_token');
+    token = null;
+  }
+}
+</script>
+
+</body>
+</html>

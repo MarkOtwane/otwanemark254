@@ -74,6 +74,8 @@ portfolio-website/
 
 ## 🔧 Local Development
 
+### Frontend (Static Site)
+
 1. **Clone the repository**
 
      ```bash
@@ -96,6 +98,57 @@ portfolio-website/
 
 3. **View locally**
      - Open `http://localhost:8000` in your browser
+
+### Backend (Node.js + PostgreSQL)
+
+1. **Start PostgreSQL** (via Docker or local installation)
+
+2. **Install server dependencies**
+
+     ```bash
+     cd server
+     npm install
+     ```
+
+3. **Configure environment**
+
+     ```bash
+     cp .env.example .env
+     # Edit .env with your database credentials
+     ```
+
+4. **Initialize database**
+
+     ```bash
+     npm run init-db
+     ```
+
+5. **Start the backend server**
+
+     ```bash
+     npm run dev
+     ```
+
+     The API will run on `http://localhost:5000`
+
+### Admin Dashboard
+
+1. **Start both servers** (frontend + backend)
+
+2. **Open the admin dashboard**
+
+     ```bash
+     # Open admin/index.html in your browser
+     # Or serve via local server
+     ```
+
+3. **Login with default credentials**
+
+     - Email: `admin@portfolio.com`
+     - Password: `admin123`
+
+4. **Manage content**
+     - Update hero section, about, skills, projects, testimonials, contact info, and social links
 
 ## 🎨 Customization
 
