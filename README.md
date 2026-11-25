@@ -2,7 +2,7 @@
 
 A modern, responsive portfolio website showcasing my skills as a Software Engineer specializing in Python, React, and Node JS.
 
-## 🚀 Features
+## Features
 
 - **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
 - **Dark/Light Theme**: Toggle between themes with smooth transitions
@@ -26,7 +26,7 @@ A modern, responsive portfolio website showcasing my skills as a Software Engine
 - **Authentication**: JWT (JSON Web Tokens)
 - **Security**: bcryptjs for password hashing
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 portfolio-website/
@@ -72,7 +72,7 @@ portfolio-website/
 └── README.md               # This file
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -184,7 +184,7 @@ Open `admin/index.html` in your browser.
 - Email: `admin@portfolio.com`
 - Password: `admin123`
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Public Endpoints
 
@@ -227,7 +227,7 @@ Open `admin/index.html` in your browser.
 | PUT | `/api/social/:id` | Update social link |
 | DELETE | `/api/social/:id` | Delete social link |
 
-## 🎨 Customization
+## Customization
 
 ### Frontend
 
@@ -247,7 +247,7 @@ Use the **Admin Dashboard** (`admin/index.html`) to manage:
 - Contact information (email, phone, location)
 - Social media links (platform, URL, icon)
 
-## 📱 Browser Support
+## Browser Support
 
 - ✅ Chrome (latest)
 - ✅ Firefox (latest)
@@ -255,7 +255,7 @@ Use the **Admin Dashboard** (`admin/index.html`) to manage:
 - ✅ Edge (latest)
 - ✅ Mobile browsers
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Backend won't start
 
@@ -277,11 +277,11 @@ Use the **Admin Dashboard** (`admin/index.html`) to manage:
 - Ensure backend is running on `http://localhost:5000`
 - Check browser console for API errors
 
-## 📝 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 📞 Contact
+## Contact
 
 - **Email**: otwanemark003@gmail.com
 - **LinkedIn**: [Mark Otwane](https://www.linkedin.com/in/mark-otwane-800871349)
